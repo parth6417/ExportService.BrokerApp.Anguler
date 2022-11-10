@@ -1,0 +1,273 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #appPoliciesForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="appPolicies.id">{{l("EditAppPolicies")}}</span>
+                        <span *ngIf="!appPolicies.id">{{l("CreateNewAppPolicies")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-row">
+                        <div class="form-group m-form__group col-6">
+                            <label for="AppProvidersBusinessName">{{l("PoliciesBusinessName")}} *</label>
+                            <select name="appPolicies.providerId" [(ngModel)]="appPolicies.providerId"
+                                class="form-control" required>
+
+                                <option disabled selected value="undefined">{{l("PoliciesBusinessName")}} *</option>
+                                <option *ngFor="let item of allAppProviderss" value="{{item.id}}">
+                                    {{item.displayName}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="AppPolicies_PolicyNumber">{{l("PolicyNumber")}} *</label>
+                            <input type="text" id="AppPolicies_PolicyNumber" class="form-control"
+                                [(ngModel)]="appPolicies.policyNumber" name="PolicyNumber" minlength="0" maxlength="50"
+                                required placeholder="{{l('PolicyNumber')}} *" />
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label for="AppPolicies_PolicyName">{{l("PolicyName")}} *</label>
+
+                            <input type="text" id="AppPolicies_PolicyName" class="form-control"
+                                [(ngModel)]="appPolicies.policyName" name="PolicyName" minlength="0" maxlength="100"
+                                required placeholder="{{l('PolicyName')}} *" />
+                        </div>
+                        <div class="form-group col-3">
+                            <label for="AppPolicies_TiempoCodeArticle">{{l("TiempoCodeArticle")}} *</label>
+                            <input type="text" id="AppPolicies_TiempoCodeArticle" class="form-control"
+                                [(ngModel)]="appPolicies.tiempoCodeArticle" name="TiempoCodeArticle" minlength="0"
+                                maxlength="100" required placeholder="{{l('TiempoCodeArticle')}} *" />
+                        </div>
+                        <div class="form-group col-3">
+                            <label for="AppPolicies_LastCertificateNumber">{{l("LastCertificateNumber")}}</label>
+                            <input required type="number" id="AppPolicies_LastCertificateNumber" class="form-control"
+                                [(ngModel)]="appPolicies.lastCertificateNumber" name="LastCertificateNumber"
+                                placeholder="{{l('LastCertificateNumber')}} *" />
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label for="AppPolicies_ValidSince">{{l("ValidSince")}}</label>
+                            <input required class="form-control m-input" type="datetime" bsDatepicker
+                                datePickerLuxonModifier [(date)]="appPolicies.validSince" id="AppPolicies_ValidSince"
+                                name="AppPolicies_ValidSince" placeholder="{{l('ValidSince')}} *">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="AppPolicies_ValidUntil">{{l("ValidUntil")}}</label>
+                            <input required class="form-control m-input" type="datetime" bsDatepicker
+                                datePickerLuxonModifier [(date)]="appPolicies.validUntil" id="AppPolicies_ValidUntil"
+                                name="AppPolicies_ValidUntil" placeholder="{{l('ValidUntil')}} *">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="AppPolicies_OperationType">{{l("OperationType")}} *</label>
+                            <!-- <input type="text" id="AppPolicies_OperationType" class="form-control"
+                                [(ngModel)]="appPolicies.operationType" name="OperationType" minlength="0"
+                                maxlength="100" required placeholder="{{l('OperationType')}} *" /> -->
+
+                            <select name="AppPolicies_OperationType" [(ngModel)]="appPolicies.operationType"
+                                class="form-control" required>
+                                <!-- <option selected="selected" value="">{{l("SelectAAppProviders")}}</option> -->
+                                <option disabled selected value=''>{{l("OperationType")}} *</option>
+                                <option value="NATIONAL">Nacional</option>
+                                <option value="INTERNATIONAL">Internacional</option>
+                                <option value="NATIONAL_INTERNATIONAL">Nacional/Internacional</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="AppPolicies_IsEnabled" class="kt-checkbox" style="margin-top:10px">
+                                <input id="AppPolicies_IsEnabled" type="checkbox" name="IsEnabled"
+                                    [(ngModel)]="appPolicies.isEnabled">
+                                {{l("PoliciesIsEnabled")}}
+                                <span></span>
+                            </label>
+                        </div>
+
+                        <div class="form-group col-12" style="margin-bottom:10px">{{l("NationalCost")}}</div>
+                        <div class="form-group col-6">
+                            <label for="AppPolicies_DryNationalCost">{{l("DryNationalCost")}}</label>
+                            <input type="number" id="AppPolicies_DryNationalCost" class="form-control"
+                                [(ngModel)]="appPolicies.dryNationalCost" name="DryNationalCost"
+                                placeholder="{{l('DryNationalCost')}}" />
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label for="AppPolicies_ReeferNationalCost">{{l("ReeferNationalCost")}}</label>
+                            <input type="number" id="AppPolicies_ReeferNationalCost" class="form-control"
+                                [(ngModel)]="appPolicies.reeferNationalCost" name="ReeferNationalCost"
+                                placeholder="{{l('ReeferNationalCost')}}" />
+                        </div>
+
+                        <div class="form-group col-12" style="margin-bottom:10px">{{l("InternationalCost")}}</div>
+                        <div class="form-group col-6">
+                            <label for="AppPolicies_DryInternationalCost">{{l("DryInternationalCost")}}</label>
+                            <input type="number" id="AppPolicies_DryInternationalCost" class="form-control"
+                                [(ngModel)]="appPolicies.dryInternationalCost" name="DryInternationalCost"
+                                placeholder="{{l('DryInternationalCost')}}" />
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label for="AppPolicies_ReeferInternationalCost">{{l("ReeferInternationalCost")}}</label>
+                            <input type="number" id="AppPolicies_ReeferInternationalCost" class="form-control"
+                                [(ngModel)]="appPolicies.reeferInternationalCost" name="ReeferInternationalCost"
+                                placeholder="{{l('ReeferInternationalCost')}}" />
+                        </div>
+
+                        <div class="form-group col-12">
+                            <label for="AppPolicies_Observations">{{l("Observations")}}</label>
+                            <!-- <textarea id="AppPolicies_Observations" class="form-control"
+                                [(ngModel)]="appPolicies.observations" name="Observations" maxlength="5000" rows="3"
+                                cols="40"></textarea> -->
+                                <p-editor minlength="0"
+								maxlength="5000" [(ngModel)]="appPolicies.observations" id="AppProviders_Observations" name="AppProviders_Observations" [style]="{'height':'300px'}"></p-editor>
+
+                            <label class="lebelCounter"
+                                for="AppPolicies_Observations">{{appPolicies.observations?appPolicies.observations.length:0}}/5000</label>
+                        </div>
+
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">{{l("AppSecurityRequirementsDetail")}}</div>
+                        <div class="panel-body">
+                            <div class="form-row">
+                                <div class="form-group col-3">
+                                    <label
+                                        for="allCommoditesTypes_commoditeTypesId">{{l("CommoditesTypesName")}}</label>
+                                    <select name="allCommoditesTypes_commoditeTypesId"
+                                        [(ngModel)]="appSecurityRequirementsDto.commoditeTypesId" class="form-control">
+                                        <option disabled selected value="undefined"></option>
+                                        <option *ngFor="let item of allCommoditesTypes" value="{{item.id}}">
+                                            {{item.displayName}}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-3">
+                                    <label
+                                        for="allRequirementsTypes_requirementTypesId">{{l("RequirementsTypesName")}}</label>
+                                    <select name="allRequirementsTypes_requirementTypesId"
+                                        [(ngModel)]="appSecurityRequirementsDto.requirementTypesId"
+                                        class="form-control">
+                                        <option disabled selected value="undefined"></option>
+                                        <option *ngFor="let item of allRequirementsTypes" value="{{item.id}}">
+                                            {{item.displayName}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-3">
+                                    <label for="appSecurityRequirementsDto_minimumAmount">{{l("MinimumAmount")}}</label>
+                                    <input type="number" id="appSecurityRequirementsDto_minimumAmount"
+                                        class="form-control" [(ngModel)]="appSecurityRequirementsDto.minimumAmount"
+                                        name="minimumAmount" />
+                                </div>
+                                <div class="form-group col-3">
+                                    <label for="appSecurityRequirementsDto_maximumAmount">{{l("MaximumAmount")}}</label>
+                                    <input type="number" id="appSecurityRequirementsDto_maximumAmount"
+                                        class="form-control" [(ngModel)]="appSecurityRequirementsDto.maximumAmount"
+                                        name="maximumAmount" />
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="btn-toolbar" role="toolbar" style="justify-content: flex-end;">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default" (click)="addSecurityRequirements()">
+                                        <i class="fas fa-plus-square"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <!--<Primeng-Datatable-Start>-->
+                        <div class="primeng-datatable-container col-12" [busyIf]="primengTableHelper.isLoading">
+                            <p-table #dataTable (onLazyLoad)="getAppSecurityRequirements()"
+                                [value]="primengTableHelper.records" [paginator]="false" [lazy]="true"
+                                [scrollable]="true" ScrollWidth="100%" [responsive]="primengTableHelper.isResponsive">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="width: 150px">
+                                            {{l('CommoditesTypesName')}}
+                                        </th>
+                                        <th style="width: 150px">
+                                            {{l('RequirementsTypesName')}}
+                                        </th>
+                                        <th style="width: 150px">
+                                            {{l('MinimumAmount')}}
+                                        </th>
+                                        <th style="width: 150px">
+                                            {{l('MaximumAmount')}}
+                                        </th>
+                                        <th>
+                                            {{l('Actions')}}
+
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-record="$implicit">
+                                    <tr>
+                                        <td style="width:150px">
+                                            <span class="ui-column-title">
+                                                {{record.appCommoditesTypesName}}</span>
+                                        </td>
+                                        <td style="width:150px">
+                                            <span class="ui-column-title">
+                                                {{record.appRequirementsTypesName}}</span>
+                                        </td>
+                                        <td style="width:150px">
+                                            <span class="ui-column-title">
+                                                {{record.appSecurityRequirements.minimumAmount}}</span>
+                                        </td>
+                                        <td style="width:150px">
+                                            <span class="ui-column-title">
+                                                {{record.appSecurityRequirements.maximumAmount}}</span>
+                                        </td>
+                                        <td>
+                                            <a href="javascript:;"
+                                                *ngIf="permission.isGranted('Pages.AppPolicies.Delete')"
+                                                (click)="deleteAppSecurityRequirements(record.appSecurityRequirements.id,record.policiesSecurityRequirementId,record.appSecurityRequirements.commoditeTypesId,record.appSecurityRequirements.requirementTypesId)">{{l('Delete')}}</a>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+
+                            </p-table>
+                            <div class="ui-table-footer">
+                                <div role="actions" class="pull-right">
+                                    <button type="button" *ngIf="primengTableHelper.totalRecordsCount != 0"
+                                        (click)="RemoveAllSecurityRequirements()" class="btn btn-sm btn-danger">
+                                        {{l("btnRemoveAll")}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <!--<Primeng-Datatable-End>-->
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default"
+                        (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!appPoliciesForm.form.valid"
+                        [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                        <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

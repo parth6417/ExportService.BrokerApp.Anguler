@@ -1,0 +1,360 @@
+﻿<div bsModal #generateCertificateModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+	aria-labelledby="generateCertificateModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<!-- <form *ngIf="active" #fileUploadForm="ngForm" enctype="multipart/form-data" novalidate autocomplete="off"> -->
+			<div class="modal-header">
+				<!-- <h4 class="modal-title">
+					{{l("GenerateCertificateIndex")}}
+				</h4> -->
+				<button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<button [disabled]="saving" type="button" class="btn btn-danger"
+					(click)="close()">{{l("Cancel")}}</button>
+				<button type="button" class="btn btn-primary blue" [buttonBusy]="saving"
+					[busyText]="l('SavingWithThreeDot')" (click)="downlaodPdf()">
+					<i class="fa fa-arrow-circle-down"></i>
+					<span>{{l("DownloadPDF")}}</span></button>
+				<button type="button" class="btn btn-primary blue" [buttonBusy]="saving"
+					[busyText]="l('SavingWithThreeDot')" (click)="downlaodDocx()">
+					<i class="fa fa-arrow-circle-down"></i>
+					<span>{{l("DownloadDOC")}}</span></button>
+
+			</div>
+			<div class="modal-body">
+
+				<div class="form-group">
+					<label for="TomadorParamiter">TOMADOR</label>
+					<input type="text" id="TomadorParamiter" class="form-control" [(ngModel)]="TomadorParamiter"
+						name="TomadorParamiter" minlength="0" maxlength="80" />
+				</div>
+
+				<div [innerHTML]="data.providerCertificateTemplate" ></div>
+				<div id="FullReport">
+					<div id="pdfReportContent" class="ReportContent">
+						<div class="container-fluid" style="font-family: Arial, Helvetica, sans-serif;">
+							
+							<div class="row">
+								<div class="col-12" style="text-align: right;">
+									<img id="logo" [src]="providerLogoImage" class="img-thumbnail" width="120" height="80">
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-12" style="text-align: center; font-size: 18.667px; font-weight: bold;">
+									CERTIFICADO DE COBERTURA Nº {{appOperations.certificateNumber}}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-12" style="text-align: justify">
+									<span>
+										Por medio del presente, se deja expresa constancia que esta aseguradora ampara,
+										bajo
+										las
+										condiciones generales y particulares de la póliza
+										{{data.policyNumber}},
+										en base a los siguientes
+										datos
+										y
+										condiciones a:
+									</span>
+								</div>
+							</div>
+
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField">
+										TOMADOR:
+									</span>
+									<span>
+										{{TomadorParamiter}}
+									</span>
+								</div>
+							</div>
+
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField">
+										ASEGURADO:
+									</span>
+									<span>
+										{{data.clientBusinessName}}
+									</span>
+								</div>
+							</div>
+
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField">
+										BENEFICIARIO:
+									</span>
+									<span>
+										{{data.billingClientBusinessName}}
+									</span>
+								</div>
+							</div>
+
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField" style="font-family: Arial, Helvetica, sans-serif;">
+										OPERACIÓN:
+									</span>
+									<span>
+										{{appOperations.operationType}}
+									</span>
+								</div>
+							</div>
+
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField">
+										TIPO DE MERCADERÍA:
+									</span>
+									<span>
+										{{appOperations.generalObservations}}
+									</span>
+								</div>
+							</div>
+
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField">
+										SUMA ASEGURADA (USD):
+									</span>
+									<span>
+										{{appOperations.insuredAmountUSD}}
+									</span>
+								</div>
+							</div>
+
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField">
+										SUMA ASEGURADA ($):
+									</span>
+									<span>
+										{{appOperations.insuredAmountARS}}
+									</span>
+								</div>
+							</div>
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField">
+										TASA DE CAMBIO:
+									</span>
+									<span>
+										{{appOperations.exchangeRate}}
+									</span>
+								</div>
+							</div>
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField">
+										VALOR FACTURA:
+									</span>
+									<span>
+										0
+									</span>
+								</div>
+							</div>
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField">
+										FLETE:
+									</span>
+									<span>
+										0
+									</span>
+								</div>
+							</div>
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField">
+										DERECHOS Y GRAVÁMENES:
+									</span>
+									<span>
+										0
+									</span>
+								</div>
+							</div>
+
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField">
+										BENEFICIO IMAGINARIO:
+									</span>
+									<span>
+										0
+									</span>
+								</div>
+							</div>
+
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField">
+										ORIGEN:
+									</span>
+									<span>
+										{{data.originalAddress}}
+									</span>
+								</div>
+							</div>
+
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField">
+										DESTINO:
+									</span>
+									<span>
+										{{data.destinyAddress}}
+									</span>
+								</div>
+							</div>
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField">
+										MEDIO DE TRANSPORTE:
+									</span>
+									<span>
+										{{data.transportsName}}
+									</span>
+								</div>
+							</div>
+
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField">
+										FECHA:
+									</span>
+									<span>
+										{{ convertToDate(appOperations.operationDate) }}
+
+									</span>
+								</div>
+							</div>
+
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField">
+										FACTURA COMERCIAL - INVOICE - BILL OF LADING:
+									</span>
+									<span>
+
+									</span>
+								</div>
+							</div>
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField">
+										VIGENCIA:
+									</span>
+									<span>
+										{{ convertToDate(appOperations.operationDate) }}
+
+									</span>
+								</div>
+							</div>
+
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField">
+										COBERTURA:
+									</span>
+									<span>
+										Según cláusulas de póliza {{data.policyNumber}}
+									</span>
+								</div>
+							</div>
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField">
+										MEDIDAS DE SEGURIDAD:
+									</span>
+									<span>
+										Según cláusulas de póliza {{data.policyNumber}}
+									</span>
+								</div>
+							</div>
+
+							<div class="row ReportFieldRow">
+								<div class="col-12">
+									<span class="ReportField">
+										OBSERVACIONES:
+									</span>
+									
+									<div [innerHTML]="appOperations.certificateObservations"></div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-12" style="text-align: justify">
+									<br>
+									<span style="font-size: 14.667px;">
+										CLAUSULA DE EXIMISIÓN DE RESPONSABILIDAD AL TRANSPORTISTA TERRESTRE.
+									</span>
+									<br>
+									<span>
+										Se exime de responsabilidad al transportista terrestre, dejando expresamente
+										aclarado que en los casos de hurto, falta de
+										entrega y desaparición, no operará la referida exclusión. Tampoco operará en los
+										casos de dolo y culpa grave del
+										transportista, sus dependientes o de la persona o personas en quienes delegare
+										la
+										realización del transporte, o el cuidado
+										de las mercaderías o efectos transportados.
+
+									</span>
+									<br>
+									<span>
+										A los efectos de ser presentado ante quien corresponda
+									</span>
+								</div>
+							</div>
+
+							<div class="row" style="margin-top: 20px;">
+								<div class="col-12" style="text-align: right;">
+									<img [src]="providerSignatureImage" class="img-thumbnail" width="120" height="80">
+								</div>
+							</div>
+
+
+
+						</div>
+					</div>
+					<div id="page2">
+						<div class="container-fluid">
+							<div class="row" style="text-align: justify;">
+								<div class="col-12">
+									<div [innerHTML]="data.appPoliciesPolicyObservations"></div>
+								</div>
+							</div>
+							<div class="row" style="margin-top: 20px;">
+								<div class="col-12" style="text-align: right;">
+									<img [src]="providerSignatureImage" class="img-thumbnail" width="120" height="80">
+								</div>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+
+				<button [disabled]="saving" type="button" class="btn btn-danger"
+					(click)="close()">{{l("Cancel")}}</button>
+				<button type="button" class="btn btn-primary blue" [buttonBusy]="saving"
+					[busyText]="l('SavingWithThreeDot')" (click)="downlaodPdf()">
+					<i class="fa fa-arrow-circle-down"></i>
+					<span>{{l("DownloadPDF")}}</span></button>
+				<button type="button" class="btn btn-primary blue" [buttonBusy]="saving"
+					[busyText]="l('SavingWithThreeDot')" (click)="downlaodDocx()">
+					<i class="fa fa-arrow-circle-down"></i>
+					<span>{{l("DownloadDOC")}}</span></button>
+
+			</div>
+
+		</div>
+	</div>
+</div>

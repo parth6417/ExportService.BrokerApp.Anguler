@@ -1,0 +1,133 @@
+<form #appCustomersForm="ngForm" novalidate (ngSubmit)="wizerdContinue()" autocomplete="off">
+
+    <div class="form-row">
+        <div class="form-group col-12 ">
+            <!-- <label for="AppCustomers_BusinessName">{{l("BusinessName")}} *</label> -->
+            <input type="text" id="AppCustomers_BusinessName" class="form-control"
+                [(ngModel)]="appCustomers.businessName" name="BusinessName" minlength="0" maxlength="80" required
+                placeholder="{{l('BusinessName')}} *"  />
+            <label class="lebelCounter"
+                for="AppCustomers_BusinessName">{{appCustomers.businessName?appCustomers.businessName.length:0}}/80</label>
+        </div>
+        <div class="form-group col-6">
+            <!-- <label for="AppCustomers_CuitCuil">{{l("CuitCuil")}} *</label> -->
+            <input type="text" id="AppCustomers_CuitCuil" class="form-control" [(ngModel)]="appCustomers.cuitCuil"
+                name="CuitCuil" matInput  mask="XX-XXXXXXXX-X" thousandSeparator="-" 
+                required placeholder="{{l('CuitCuil')}} *"/>
+        </div>
+        <div class="form-group col-6">
+            <label for="AppCustomers_IsEnabled" class="kt-checkbox">
+                <input id="AppCustomers_IsEnabled" type="checkbox" name="IsEnabled"
+                    [(ngModel)]="appCustomers.isEnabled">
+                {{l("ClientIsEnabled")}}
+                <span></span>
+            </label>
+        </div>
+        <div class="form-group col-12">
+            <!-- <label for="AppCustomers_Address">{{l("Address")}}</label> -->
+            <input type="text" id="AppCustomers_Address" class="form-control" [(ngModel)]="appCustomers.address"
+                name="Address" minlength="0" maxlength="120" placeholder="{{l('Address')}}" />
+            <label class="lebelCounter"
+                for="AppCustomers_Address">{{appCustomers.address?appCustomers.address.length:0}}/120</label>
+        </div>
+
+        <div class="form-group col-6">
+            <!-- <label for="AppCustomers_Phone">{{l("Phone")}}</label> -->
+            <input type="text" id="AppCustomers_Phone" class="form-control" [(ngModel)]="appCustomers.phone"
+                name="Phone" minlength="0" maxlength="10" placeholder="{{l('Phone')}}" />
+            <label class="lebelCounter"
+                for="AppCustomers_Phone">{{appCustomers.phone?appCustomers.phone.length:0}}/10</label>
+        </div>
+
+        <div class="form-group col-6">
+            <!-- <label for="AppCustomers_ContactPerson">{{l("ContactPerson")}}</label> -->
+            <input type="text" id="AppCustomers_ContactPerson" class="form-control"
+                [(ngModel)]="appCustomers.contactPerson" name="ContactPerson" minlength="0" maxlength="120"
+                placeholder="{{l('ContactPerson')}}" />
+            <label class="lebelCounter"
+                for="AppCustomers_ContactPerson">{{appCustomers.contactPerson?appCustomers.contactPerson.length:0}}/120</label>
+        </div>
+
+        <div class="form-group col-6">
+            <!-- <label for="AppCustomers_CellPhone">{{l("CellPhone")}}</label> -->
+            <input type="text" id="AppCustomers_CellPhone" class="form-control" [(ngModel)]="appCustomers.cellPhone"
+                name="CellPhone" minlength="0" maxlength="12" placeholder="{{l('CellPhone')}}" />
+            <label class="lebelCounter"
+                for="AppCustomers_CellPhone">{{appCustomers.cellPhone?appCustomers.cellPhone.length:0}}/12</label>
+        </div>
+        <div class="form-group col-6">
+            <!-- <label for="AppCustomers_Email">{{l("Email")}}</label> -->
+            <input type="text" id="AppCustomers_Email" class="form-control" [(ngModel)]="appCustomers.email"
+                name="Email" minlength="0" maxlength="50" placeholder="{{l('Email')}}" />
+        </div>
+
+        <div class="form-group col-12">
+            <!-- <label for="AppCustomers_Observations">{{l("Observations")}}</label> -->
+            <input type="text" id="AppCustomers_Observations" class="form-control"
+                [(ngModel)]="appCustomers.observations" name="Observations" minlength="0" maxlength="200"
+                placeholder="{{l('Observations')}}" />
+            <label class="lebelCounter"
+                for="AppCustomers_Observations">{{appCustomers.observations?appCustomers.observations.length:0}}/200</label>
+        </div>
+        <div class="form-group col-12">
+            <h5>Definición de Tasas de Venta</h5>
+        </div>
+
+        <div class="form-group col-3">
+            <label>{{l("NationalPercentageLebel")}}</label>
+        </div>
+
+        <div class="form-group col-3" >
+            <!-- <label for="AppCustomers_NationalDrySaleRatePercentage">{{l("NationalDrySaleRatePercentage")}}</label> -->
+            <input type="number" id="AppCustomers_NationalDrySaleRatePercentage" class="form-control"
+                [(ngModel)]="appCustomers.nationalDrySaleRatePercentage" name="NationalDrySaleRatePercentage" placeholder="{{l('NationalDrySaleRatePercentage')}}" />
+        </div>
+
+        <div class="form-group col-3">
+            <!-- <label
+                for="AppCustomers_NationalReeferSaleRatePercentage">{{l("NationalReeferSaleRatePercentage")}}</label> -->
+            <input type="number" id="AppCustomers_NationalReeferSaleRatePercentage" class="form-control"
+                [(ngModel)]="appCustomers.nationalReeferSaleRatePercentage"
+                name="NationalReeferSaleRatePercentage" placeholder="{{l('NationalReeferSaleRatePercentage')}}" />
+        </div>
+        <div class="form-group col-3">
+            <!-- <label for="AppCustomers_NationalMinSaleRate">{{l("NationalMinSaleRate")}}</label> -->
+            <input type="number" id="AppCustomers_NationalMinSaleRate" class="form-control"
+                [(ngModel)]="appCustomers.nationalMinSaleRate" name="NationalMinSaleRate" placeholder="{{l('NationalMinSaleRate')}}" />
+        </div>
+        
+        <div class="form-group col-3">
+            <label>{{l("InternationalPercentageLebel")}}</label>
+        </div>
+        <div class="form-group col-3">
+            <!-- <label
+                for="AppCustomers_InternationalDrySaleRatePercentage">{{l("InternationalDrySaleRatePercentage")}}</label> -->
+            <input type="number" id="AppCustomers_InternationalDrySaleRatePercentage" class="form-control"
+                [(ngModel)]="appCustomers.internationalDrySaleRatePercentage"
+                name="InternationalDrySaleRatePercentage"  placeholder="{{l('InternationalDrySaleRatePercentage')}}"/>
+        </div>
+        <div class="form-group col-3">
+            <!-- <label
+                for="AppCustomers_InternationalReeferSaleRatePercentage">{{l("InternationalReeferSaleRatePercentage")}}</label> -->
+            <input type="number" id="AppCustomers_InternationalReeferSaleRatePercentage"
+                class="form-control" [(ngModel)]="appCustomers.internationalReeferSaleRatePercentage"
+                name="InternationalReeferSaleRatePercentage" placeholder="{{l('InternationalReeferSaleRatePercentage')}}" />
+        </div>
+
+        <div class="form-group col-3">
+            <!-- <label for="AppCustomers_InternationalMinSaleRate">{{l("InternationalMinSaleRate")}}</label> -->
+            <input type="number" id="AppCustomers_InternationalMinSaleRate" class="form-control"
+                [(ngModel)]="appCustomers.internationalMinSaleRate" name="InternationalMinSaleRate" placeholder="{{l('InternationalMinSaleRate')}}" />
+        </div>
+
+        
+
+
+    </div>
+    <div class="footer pull-right">
+        <button [disabled]="saving" type="button" class="btn btn-warning" (click)="close()">{{l("Cancel")}}</button>
+        <button type="submit" class="btn btn-primary blue" [disabled]="!appCustomersForm.form.valid"
+            [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+            <span>{{l("btnContinueNext")}}</span></button>
+    </div>
+</form>

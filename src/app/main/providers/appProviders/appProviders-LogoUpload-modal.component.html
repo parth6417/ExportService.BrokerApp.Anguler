@@ -1,0 +1,70 @@
+<div bsModal #LogoUploadModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+	aria-labelledby="LogoUploadModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<form *ngIf="active" #LogoUploadForm="ngForm" novalidate  autocomplete="off">
+				<div class="modal-header">
+					<h4 class="modal-title">
+						<span *ngIf="appProviders.id">{{l("LogoUploadAppProviders")}}</span>
+					</h4>
+					<button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-row">
+
+						<div class="form-group col-md-6" style="text-align: center;">
+							<label for="ProviderLogoImage">{{l("ProviderLogo")}}</label>
+							<br>
+							<img id="ProviderLogoImage" [src]="ProviderLogoImage" class="img-thumbnail" width="139" height="35">
+						</div>
+						<div class="form-group col-md-6" style="text-align: center;">
+							<label for="ProviderSignatureImage">{{l("ProviderSignature")}}</label>
+							<br>
+							<img  id="ProviderSignatureImage" [src]="ProviderSignatureImage" class="img-thumbnail" width="139" height="35">
+						</div>
+
+						<div class="form-group col-md-6">
+							<input type="file" class="custom-file-input" id="logoUploader" name="logoUploader" ng2FileSelect accept="image/*"
+									[uploader]="logoUploader" lang="es" required>
+							<label class="custom-file-label" for="customFile">Elija Logo</label>
+							<span class="form-text text-muted col-lg-12">{{"UploadLogo_Info" | localize}}</span>
+
+							<div *ngFor="let item of logoUploader.queue">
+								<strong>{{ item?.file?.name }}</strong>
+							</div>
+							<button class="btn btn-primary" type="button" (click)="uploadLogo()" [disabled]="!logoUploader.getNotUploadedItems().length" >{{"Upload" | localize}}  </button>
+						</div>
+
+						<div class="form-group col-md-6">
+							<input type="file" class="custom-file-input" id="signatureUploader" name="signatureUploader" ng2FileSelect accept="image/*"
+									[uploader]="signatureUploader" lang="es" required>
+							<label class="custom-file-label" for="customFile">Elija Firma</label>
+							<span class="form-text text-muted col-lg-12">{{"UploadLogo_Info" | localize}}</span>
+
+							<div *ngFor="let item of logoUploader.queue">
+								<strong>{{ item?.file?.name }}</strong>
+							</div>
+							<button class="btn btn-primary" type="button" (click)="uploadSignature()" [disabled]="!signatureUploader.getNotUploadedItems().length" >{{"Upload" | localize}}  </button>
+						</div>
+
+
+
+
+					</div>
+
+
+				</div>
+				<div class="modal-footer">
+					<button [disabled]="saving" type="button" class="btn btn-default red"
+						(click)="close()">{{l("Cancel")}}</button>
+					<!-- <button type="submit" class="btn btn-primary blue" [disabled]="!LogoUploadForm.form.valid"
+						[buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+						<span>{{l("Save")}}</span></button> -->
+				</div>
+			</form>
+		</div>
+	</div>
+
+</div>

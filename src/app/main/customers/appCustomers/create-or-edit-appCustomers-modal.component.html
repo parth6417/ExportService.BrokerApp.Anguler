@@ -1,0 +1,109 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+	aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+	<div class="modal-dialog modal-lg clientmodal">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<h4 class="modal-title">
+					<span *ngIf="appCustomers.id">{{l("EditAppCustomers")}}</span>
+					<span *ngIf="!appCustomers.id">{{l("CreateNewAppCustomers")}}</span>
+				</h4>
+				<button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				
+				<tabset  #staticTabs >
+					<tab #tabA="tab" class="p-5" heading="{{'ClientTab' | localize}}" [disabled]="!(activeTabIndex == 0)" >
+						<div class="kt-subheader__main">
+							<h3 class="kt-subheader__title">
+								<span>{{l("tabCustomerModelHeader")}}</span>
+							</h3>
+							<span class="kt-subheader__separator kt-subheader__separator--v"></span>
+							<span class="kt-subheader__desc">
+								{{l("tabCustomerModelSubHeader")}}
+							</span>
+						</div>
+
+						<tabCustomerModel #tabCustomerModel (closeFormCallBack)='close()' (appCustomers)='appCustomers'
+							(saveContinueCallBack)="CustomerModelNext()">
+						</tabCustomerModel>
+					</tab>
+					<tab #tabB="tab" class="p-5" heading="{{'CustomersPoliciesTab' | localize}}" [disabled]="!(activeTabIndex == 1)">
+
+						<div class="kt-subheader__main">
+							<h3 class="kt-subheader__title">
+								<span>{{l("tabCustomerPolicyModelHeader")}}</span>
+							</h3>
+							<span class="kt-subheader__separator kt-subheader__separator--v"></span>
+							<span class="kt-subheader__desc">
+								{{l("tabCustomerPolicyModelSubHeader")}}
+							</span>
+						</div>
+
+						<tabCustomerPolicyModel #tabCustomerPolicyModel (closeFormCallBack)='close()'
+							(appCustomers)='appCustomers' (saveContinueCallBack)="CustomerPolicyModelNext()"
+							(previousTabCallBack)="selectTabIndex($event)">
+						</tabCustomerPolicyModel>
+
+					</tab>
+					<tab #tabC="tab" class="p-5" heading="{{'ClientPriceTab' | localize}}" [disabled]="!(activeTabIndex == 2)">
+
+						<div class="kt-subheader__main">
+							<h3 class="kt-subheader__title">
+								<span>{{l("tabCustomerPriceModelHeader")}}</span>
+							</h3>
+							<span class="kt-subheader__separator kt-subheader__separator--v"></span>
+							<span class="kt-subheader__desc">
+								<!-- {{l("tabCustomerPriceModelSubHeader")}} -->
+							</span>
+						</div>
+
+						<tabCustomerPriceModel #tabCustomerPriceModel (closeFormCallBack)='close()'
+							(appCustomers)='appCustomers' (saveContinueCallBack)="PriceModelNext()"
+							(previousTabCallBack)="selectTabIndex($event)">
+						</tabCustomerPriceModel>
+					</tab>
+
+					<tab #tabD="tab" class="p-5" heading="{{'InsuranceCommissionTab' | localize}}"  [disabled]="!(activeTabIndex == 3)">
+
+						<div class="kt-subheader__main">
+							<h3 class="kt-subheader__title">
+								<span>{{l("tabInsuranceCommissionModelHeader")}}</span>
+							</h3>
+							<span class="kt-subheader__separator kt-subheader__separator--v"></span>
+							<span class="kt-subheader__desc">
+								<!-- {{l("tabInsuranceCommissionModelSubHeader")}} -->
+							</span>
+						</div>
+
+						<tabInsuranceCommissionModel #tabInsuranceCommissionModel (closeFormCallBack)='close()'
+							(appCustomers)='appCustomers' (saveContinueCallBack)="InsuranceCommissionModelNext()"
+							(previousTabCallBack)="selectTabIndex($event)">
+						</tabInsuranceCommissionModel>
+					</tab>
+					<tab #tabE="tab" class="p-5" heading="{{'SequrityCommissionTab' | localize}}" [disabled]="!(activeTabIndex == 4)" >
+						<div class="kt-subheader__main">
+							<h3 class="kt-subheader__title">
+								<span>{{l("tabSecurityCommissionModelHeader")}}</span>
+							</h3>
+							<span class="kt-subheader__separator kt-subheader__separator--v"></span>
+							<span class="kt-subheader__desc">
+								<!-- {{l("tabSecurityCommissionModelSubHeader")}} -->
+							</span>
+						</div>
+
+						<tabSecurityCommissionModel #tabSecurityCommissionModel (closeFormCallBack)='close()'
+							(appCustomers)='appCustomers' (saveContinueCallBack)="FainalySaveAll()"
+							(previousTabCallBack)="selectTabIndex($event)">
+						</tabSecurityCommissionModel>
+					</tab>
+
+				</tabset>
+			</div>
+			
+		</div>
+	</div>
+
+</div>

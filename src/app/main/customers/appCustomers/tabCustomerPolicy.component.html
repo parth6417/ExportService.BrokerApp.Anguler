@@ -1,0 +1,151 @@
+<form #appCustomersPoliciForm="ngForm" novalidate (ngSubmit)="wizerdContinue()" autocomplete="off">
+    <div class="form-row">
+        <div class="form-group col-6">
+            <!-- <label for="AppCustomersPolicies_OperationType">{{l("OperationType")}} *</label> -->
+            <select id="AppCustomersPolicies_OperationType" name="AppCustomersPolicies_OperationType" [(ngModel)]="customersPolicie.operationType"
+                class="form-control" required>
+                <!-- <option selected="selected" value="">{{l("SelectAAppProviders")}}</option> -->
+                <option disabled selected value="undefined">{{l("OperationType")}} *</option>
+                <option value="NATIONAL">Nacional</option>
+                <option value="INTERNATIONAL">Internacional</option>
+                <option value="NATIONAL_INTERNATIONAL">Nacional/Internacional</option>
+            </select>
+
+        </div>
+
+        <div class="form-group col-6">
+            <!-- <label for="AppPoliciesPolicyName">{{l("Policies")}}</label> -->
+            <select name="appCustomersPolicies.policyId" [(ngModel)]="customersPolicie.policyId"
+                class="form-control" required>
+                <option disabled selected value="undefined">{{l("SelectAAppPolicies")}}</option>
+                <option *ngFor="let item of allAppPoliciess" value="{{item.id}}">{{item.displayName}}</option>
+            </select>
+        </div>
+
+        <div class="form-group  m-checkbox-list col-3">
+            <label for="AppCustomersPolicies_ApplyDry" class="kt-checkbox">
+                <input id="AppCustomersPolicies_ApplyDry" type="checkbox" name="ApplyDry"
+                    [(ngModel)]="customersPolicie.applyDry">
+                {{l("ApplyDry")}}
+                <span></span>
+            </label>
+        </div>
+
+        <div class=" form-group m-checkbox-list col-3">
+            <label for="AppCustomersPolicies_ApplyReefer" class="kt-checkbox">
+                <input id="AppCustomersPolicies_ApplyReefer" type="checkbox" name="ApplyReefer"
+                    [(ngModel)]="customersPolicie.applyReefer">
+                {{l("ApplyReefer")}}
+                <span></span>
+            </label>
+        </div>
+
+        <div class=" form-group col-6">
+            <div class="btn-toolbar" role="toolbar" style="justify-content: flex-end;">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-info"
+                        (click)="addCustomerPolicy()"
+                        [disabled]="!appCustomersPoliciForm.form.valid">
+                        <i class="fas fa-plus-square"></i> {{l("btnAddPolicieList")}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <h6>
+                {{l("CustomerpolicyDatatable")}}
+            </h6>
+        </div>
+    </div>
+
+    <div class="row align-items-center">
+        <!--<Primeng-Datatable-Start>-->
+
+        <div class="primeng-datatable-container col-12" [busyIf]="primengTableHelper.isLoading">
+            <p-table #dataTable (onLazyLoad)="loadCustomerPolicy()" [value]="primengTableHelper.records"
+                [paginator]="false" ScrollWidth="100%" [responsive]="primengTableHelper.isResponsive">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 150px" SortableColumn="operationTypeDisplayText">
+                            {{l('OperationType')}}
+                            <p-sortIcon field="record.operationTypeDisplayText"></p-sortIcon>
+                        </th>
+                        
+                        <th style="width: 150px" pSortableColumn="policyName">
+                            {{l('PolicyName')}}
+                            <p-sortIcon field="record.policyName"></p-sortIcon>
+                        </th>
+
+                        <th style="width: 150px">
+                            {{l('ApplyDry')}}
+                        </th>
+                        <th style="width: 150px">
+                            {{l('ApplyReefer')}}
+                        </th>
+                        <th style="width: 150px">
+                            {{l('Actions')}}
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-record="$implicit" let-rowIndex="rowIndex">
+                    <tr>
+                        <td style="width:150px">
+                            <span class="ui-column-title">
+                                {{record.operationTypeDisplayText}}</span>
+                        </td>
+                        <td style="width:150px">
+                            <span class="ui-column-title">
+                                {{record.policyName}}</span>
+                        </td>
+                        
+                        <td style="width:150px">
+                           
+                                <span class="ui-column-title">
+                                    <div *ngIf="record.applyDry" class="text-center"><i class="fa fa-check-circle kt--font-success" title="True"></i></div>
+                                    <div *ngIf="!record.applyDry" class="text-center"><i class="fa fa-times-circle" title="False"></i></div>
+                                </span>
+                        </td>
+                        <td style="width:150px">
+                                <span class="ui-column-title">
+                                    <div *ngIf="record.applyReefer" class="text-center"><i class="fa fa-check-circle kt--font-success" title="True"></i></div>
+                                    <div *ngIf="!record.applyReefer" class="text-center"><i class="fa fa-times-circle" title="False"></i></div>
+                                </span>
+                        </td>
+                        <td style="width:150px">
+                            <a href="javascript:;"
+                            *ngIf="permission.isGranted('Pages.AppCustomersPolicies.Delete')"
+                            (click)="deleteCustomerPolicy(record,rowIndex)">{{l('Delete')}}</a>
+                        </td>
+
+                    </tr>
+                </ng-template>
+
+            </p-table>
+            <div class="ui-table-footer">
+                <!-- <div role="actions" class="pull-right">
+                    <button type="button" *ngIf="primengTableHelper.totalRecordsCount != 0"
+                        (click)="RemoveAllSecurityRequirements()" class="btn btn-sm btn-danger">
+                        {{l("btnRemoveAll")}}
+                    </button>
+                </div> -->
+            </div>
+        </div>
+
+
+
+    </div>
+    <!--<Primeng-Datatable-End>-->
+    <div class="footer pull-right">
+        <button [disabled]="saving" type="button" class="btn btn-warning" (click)="close()">{{l("Cancel")}}</button>
+        <button [disabled]="saving" type="button" class="btn btn-danger"
+            (click)="returnPreviousTab()">{{l("btnReturnPrevious")}}</button>
+        <button type="submit" class="btn btn-primary blue" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i
+                class="fa fa-save"></i>
+            <span>{{l("btnContinueNext")}}</span></button>
+    </div>
+</form>

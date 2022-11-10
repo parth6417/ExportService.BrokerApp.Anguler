@@ -1,0 +1,134 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+	aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<form *ngIf="active" #appProvidersForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+				<div class="modal-header">
+					<h4 class="modal-title">
+						<span *ngIf="appProviders.id">{{l("EditAppProviders")}}</span>
+						<span *ngIf="!appProviders.id">{{l("CreateNewAppProviders")}}</span>
+					</h4>
+					<button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+
+					<div class="form-row">
+						<div class="form-group col-md-12">
+                            <label for="AppProviders_BusinessName">{{l('BusinessName')}} *</label>
+
+							<input type="text" id="AppProviders_BusinessName" class="form-control"
+								[(ngModel)]="appProviders.businessName" name="BusinessName" minlength="0" maxlength="80"
+								placeholder="{{l('BusinessName')}} *" required />
+								<label class="lebelCounter" for="AppProviders_BusinessName">{{appProviders.businessName?appProviders.businessName.length:0}}/80</label>
+
+
+						</div>
+
+						<div class="form-group col-md-6">
+                            <label for="AppProviders_CuitCuil">{{l('CuitCuil')}} *</label>
+
+							<input type="text" id="AppProviders_CuitCuil" class="form-control"
+								[(ngModel)]="appProviders.cuitCuil" name="CuitCuil"
+								matInput  mask="XX-XXXXXXXX-X" thousandSeparator="-"  placeholder="{{l('CuitCuil')}} *" required />
+								<label class="lebelCounter" for="AppProviders_CuitCuil">{{appProviders.cuitCuil?appProviders.cuitCuil.length:0}}/11</label>
+
+						</div>
+						<div class="form-group col-md-6">
+                            <label for="AppProviders_Phone">{{l('Phone')}} </label>
+
+							<input type="text" id="AppProviders_Phone" class="form-control"
+								[(ngModel)]="appProviders.phone" name="Phone" minlength="0" maxlength="10"
+								placeholder="{{l('Phone')}}" />
+								<label class="lebelCounter" for="AppProviders_Phone">{{appProviders.phone?appProviders.phone.length:0}}/11</label>
+
+						</div>
+
+
+						<div class="form-group col-md-12">
+                            <label for="AppProviders_Address">{{l('Address')}} </label>
+
+							<input type="text" id="AppProviders_Address" class="form-control"
+								[(ngModel)]="appProviders.address" name="Address" minlength="0" maxlength="120"
+								placeholder="{{l('Address')}}" />
+								<label class="lebelCounter" for="AppProviders_Address">{{appProviders.address?appProviders.address.length:0}}/120</label>
+						</div>
+
+
+						<div class="form-group col-md-12">
+                            <label for="AppProviders_ContactPerson">{{l('ContactPerson')}} </label>
+
+							<input type="text" id="AppProviders_ContactPerson" class="form-control"
+								[(ngModel)]="appProviders.contactPerson" name="ContactPerson" minlength="0"
+								maxlength="120" placeholder="{{l('ContactPerson')}}" />
+								<label class="lebelCounter" for="AppProviders_ContactPerson">{{appProviders.contactPerson?appProviders.contactPerson.length:0}}/120</label>
+						</div>
+
+						<div class="form-group col-md-6">
+                            <label for="AppProviders_CellPhone">{{l('CellPhone')}} </label>
+
+							<input type="text" id="AppProviders_CellPhone" class="form-control"
+								[(ngModel)]="appProviders.cellPhone" name="CellPhone" minlength="0" maxlength="12"
+								placeholder="{{l('CellPhone')}}" />
+								<label class="lebelCounter" for="AppProviders_CellPhone">{{appProviders.cellPhone?appProviders.cellPhone.length:0}}/12</label>
+						</div>
+						<div class="form-group col-md-6">
+                            <label for="AppProviders_Email">{{l('ProviderEmail')}} </label>
+
+							<input type="text" id="AppProviders_Email" class="form-control"
+								[(ngModel)]="appProviders.email" name="Email" minlength="0" maxlength="50"
+								placeholder="{{l('ProviderEmail')}}" />
+						</div>
+
+						<fieldset class="scheduler-border" style="width: 100%;">
+							<legend class="scheduler-border">{{l('SelectionofServiceType')}}</legend>
+							<div class="form-row" style="margin-top:5px">
+								<div class="form-group  col-3 " *ngFor="let item of providersServiceTypesList">
+									<label for="selectionType{{item.value}}" class="kt-checkbox control-label">
+										<input id="selectionType{{item.value}}" name="selectionType{{item.value}}"
+											type="checkbox" [(ngModel)]="item.isSelected" value="{{item.value}}">
+										{{item.text}}
+									</label>
+								</div>
+							</div>
+
+						</fieldset>
+
+
+						<div class="form-group col-12">
+								<p-editor minlength="0"
+								maxlength="200" [(ngModel)]="appProviders.observations" id="AppProviders_Observations" name="AppProviders_Observations" [style]="{'height':'300px'}"></p-editor>
+
+								<label class="lebelCounter" for="AppProviders_Observations">{{appProviders.observations?appProviders.observations.length:0}}/200</label>
+						</div>
+
+
+						<div class="form-group  col-12">
+							<label for="AppProviders_IsEnabled" class="kt-checkbox">
+								<input id="AppProviders_IsEnabled" type="checkbox" name="IsEnabled"
+									   [(ngModel)]="appProviders.isEnabled">
+								{{l("ProviderIsEnabled")}}
+								<span></span>
+							</label>
+						</div>
+
+
+
+
+					</div>
+
+
+				</div>
+				<div class="modal-footer">
+					<button [disabled]="saving" type="button" class="btn btn-default"
+						(click)="close()">{{l("Cancel")}}</button>
+					<button type="submit" class="btn btn-primary blue" [disabled]="!appProvidersForm.form.valid"
+						[buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+						<span>{{l("Save")}}</span></button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+</div>

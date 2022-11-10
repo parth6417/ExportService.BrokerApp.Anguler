@@ -1,0 +1,277 @@
+﻿<div bsModal #auditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="auditModal"
+	aria-hidden="true" [config]="{backdrop: 'static'}">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">
+					Historial de la {{appOperations.operationNumber}} {{ClientBusinessName}}
+					{{appOperations.certificateNumber}}
+				</h4>
+				<button type="button" class="close" (click)="close()" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="col-md-12">
+					<div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+						<div class="kt-portlet kt-portlet--mobile">
+							<div class="kt-portlet__body">
+								<div class="row align-items-center">
+									<!--<Primeng-Datatable-Start>-->
+									<div class="primeng-datatable-container col-12"
+										[busyIf]="primengTableHelper.isLoading">
+										<p-table #auditdataTable (onLazyLoad)="getAllOperationAudits($event)"
+											[value]="primengTableHelper.records"
+											rows="{{primengTableHelper.defaultRecordsCountPerPage}}" [paginator]="false"
+											[lazy]="true" [scrollable]="true" ScrollWidth="100%"
+											[responsive]="primengTableHelper.isResponsive"
+											[resizableColumns]="primengTableHelper.resizableColumns">
+											<ng-template pTemplate="header">
+												<tr>
+													<th style="width: 130px">UserName</th>
+													<th style="width: 130px">Fecha Modificación</th>
+													<th style="width: 130px">Acción</th>
+													<th style="width: 130px">Nro Operación</th>
+													<th style="width: 130px">Estado</th>
+													<th style="width: 130px">Fecha Operacion</th>
+													<th style="width: 130px">Precio Venta</th>
+													<th style="width: 130px">Costo</th>
+													<th style="width: 130px">Nro Factura</th>
+													<th style="width: 130px">Nro Recibo</th>
+													<th style="width: 130px">Origen</th>
+													<th style="width: 130px">Dirección Origen</th>
+													<th style="width: 130px">Destino</th>
+													<th style="width: 130px">Dirección Destino</th>
+													<th style="width: 130px">Comprobante</th>
+													<th style="width: 130px">Servicio Seguridad</th>
+													<th style="width: 130px">Observaciones Generales</th>
+													<th style="width: 250px">Observaciones Certificado</th>
+													<th style="width: 130px">Servicio Seguro</th>
+													<th style="width: 130px">Monto Factura ARS</th>
+													<th style="width: 130px">Monto Factura USD</th>
+													<th style="width: 130px">Flete ARS</th>
+													<th style="width: 130px">Flete USD</th>
+													<th style="width: 130px">Derechos y Gravs. ARS</th>
+													<th style="width: 130px">Derechos y Gravs. USD</th>
+													<th style="width: 130px">Beneficio Ima. ARS</th>
+													<th style="width: 130px">Beneficio Ima. USD</th>
+													<th style="width: 130px">Suma Asegurada ARS</th>
+													<th style="width: 130px">Suma Asegurdada USD</th>
+													<th style="width: 130px">Tipo de Cambio</th>
+													<th style="width: 130px">Tasa Venta</th>
+													<th style="width: 130px">% Costo</th>
+													<th style="width: 130px">Tractor</th>
+													<th style="width: 130px">Semi</th>
+													<th style="width: 130px">Nombre Apellido Chofer</th>
+													<th style="width: 130px">DNI Chofer</th>
+													<th style="width: 130px">Celular Chofer</th>
+													<th style="width: 130px">Servicio MPP</th>
+													<th style="width: 130px">Servicio Custodia</th>
+													<th style="width: 130px">Servicio Auditoría</th>
+													<th style="width: 130px">Subtotal Precio MPP</th>
+													<th style="width: 130px">Cantidad KM</th>
+													<th style="width: 130px">Precio por KM</th>
+													<th style="width: 130px">Horas Extras</th>
+													<th style="width: 130px">Precio Horas Extras</th>
+													<th style="width: 130px">Precio Peajes</th>
+													<th style="width: 130px">Subtotal Custodia</th>
+													<th style="width: 130px">Subtotal Auditoría</th>
+													<th style="width: 130px">Total Operación ARS</th>
+													<th style="width: 130px">Total Operación USD</th>
+													<th style="width: 130px">Facturación Subtotal Seguro</th>
+													<th style="width: 130px">Costo Subtotal Seguro</th>
+													<th style="width: 130px">Razón Social Cliente</th>
+													<th style="width: 130px">CUIT/CUIL Cliente</th>
+													<th style="width: 130px">Razón Social Cliente Facturación</th>
+													<th style="width: 130px">CUIT/CUIL Cliente Facturación</th>
+													<th style="width: 130px">Razón Social Proveedor Satélite</th>
+													<th style="width: 130px">CUIT/CUIL Proveedor Satélite</th>
+													<th style="width: 130px">Nombre Póliza</th>
+													<th style="width: 130px">Número Póliza</th>
+													<th style="width: 130px">Nombre Compañía Seguro</th>
+													<th style="width: 130px">Tipo Mercadería</th>
+													<th style="width: 130px">Puerto E/S</th>
+													<th style="width: 130px">Transporte</th>
+													<th style="width: 130px">Zona</th>
+													<th style="width: 130px">Motivos MPP</th>
+													<th style="width: 130px">Motivos Custodia</th>
+													<th style="width: 130px">Tipo Operación</th>
+													<th style="width: 130px">Tipo Contenedor</th>
+													<th style="width: 130px">Tipo Transporte</th>
+													<th style="width: 130px">Base Cálculo Seguro</th>
+													<th style="width: 130px">Porcentaje Total a Distribuir</th>
+													<th style="width: 130px">Locación Origen Seguridad</th>
+													<th style="width: 130px">Dirección Origen Seguridad</th>
+													<th style="width: 130px">Locación Destino Seguridad</th>
+													<th style="width: 130px">Dirección Destino Seguridad</th>
+												</tr>
+											</ng-template>
+											<ng-template pTemplate="body" let-record="$implicit">
+												<tr>
+													<td style="width: 130px"> {{record.userName}}</td>
+													<td style="width: 130px"> {{record.appOperationsAudit.updatedOn}}
+													</td>
+													<td style="width: 130px">
+														{{getActionDisplay(record.appOperationsAudit.action)}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.operationNumber}}</td>
+													<td style="width: 130px">
+														{{getOperationStateDisplay(record.appOperationsAudit.operationState)}}
+													</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.operationDate | date:'dd/MM/yyyy'}}
+													</td>
+													<td style="width: 130px"> </td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.costPercentage }}</td>
+													<td style="width: 130px"> {{record.appOperationsAudit.billNumber}}
+													</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.receiptNumber}}</td>
+													<td style="width: 130px">
+														{{record.appLocationsOriginName}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.originAddress}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.destinyLocationId}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.destinyAddress}}</td>
+													<td style="width: 130px"> {{record.appOperationsAudit.voucher}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.securityService}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.generalObservations}}</td>
+													<td style="width: 250px">
+														<div
+															[innerHTML]="record.appOperationsAudit.certificateObservations">
+														</div>
+													</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.insuranceService}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.billAmountARS}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.billAmountUSD}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.freightAmountARS}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.freightAmountUSD}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.dutiesAndChargesARS}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.dutiesAndChargesUSD}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.imaginaryBenefitARS}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.imaginaryBenefitUSD}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.insuredAmountARS}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.insuredAmountUSD}}</td>
+													<td style="width: 130px"> {{record.appOperationsAudit.exchangeRate}}
+													</td>
+													<td style="width: 130px"> {{record.appOperationsAudit.rateOfSale}}
+													</td>
+													<td style="width: 130px"> {{record.appOperationsAudit.costPercentage}}
+													</td>
+													<td style="width: 130px"> {{record.appOperationsAudit.tractor}}</td>
+													<td style="width: 130px"> {{record.appOperationsAudit.semi}}</td>
+													<td style="width: 130px"> {{record.appOperationsAudit.driverName}}
+													</td>
+													<td style="width: 130px"> {{record.appOperationsAudit.driverDni}}
+													</td>
+													<td style="width: 130px"> {{record.appOperationsAudit.driverCell}}
+													</td>
+													<td style="width: 130px"> {{record.appOperationsAudit.mppService}}
+													</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.custodyService}}</td>
+													<td style="width: 130px"> {{record.appOperationsAudit.auditService}} 
+													</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.mppSubtotal_price}}</td>
+													<td style="width: 130px"> {{record.appOperationsAudit.kmQuantity}}
+													</td>
+													<td style="width: 130px"> {{record.pricePerKm}}</td>
+													<td style="width: 130px"> {{record.appOperationsAudit.extraHours}}
+													</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.pricePerExtraHour}}</td>
+													<td style="width: 130px"> {{record.appOperationsAudit.tollPrice}}
+													</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.custodySubtotal}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.auditSubtotal}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.operationTotalARS}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.operationTotalUSD}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.subtotalInsuranceBilling}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.insuranceSubtotalCost}}</td>
+													<td style="width: 130px"> {{record.clientBusinessName}}</td>
+													<td style="width: 130px"> {{record.clientCuitCuil}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.billingCustomerId}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.billingCustomerId}}</td>
+													<td style="width: 130px"> </td>
+													<td style="width: 130px"> </td>
+													<td style="width: 130px"> {{record.appPoliciesPolicyName}}</td>
+													<td style="width: 130px"> {{record.appPoliciesPolicyNumber}}</td>
+													<td style="width: 130px"> {{record.appProvidersBusinessName}}</td>
+													<td style="width: 130px"> {{record.appCommoditesTypesName}}</td>
+													<td style="width: 130px"> {{record.appPortsName}}</td>
+													<td style="width: 130px"> {{record.appTransportsName}}</td>
+													<td style="width: 130px"> {{record.appZonesName}}</td>
+													<td style="width: 130px"> </td>
+													<td style="width: 130px"> </td>
+													<td style="width: 130px">
+														{{getOperationTypeDisplay(record.appOperationsAudit.operationType)}}
+													</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.containerType}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.transportType}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.insuranceCalculationBase}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.insuranceToDistributePercentage}}
+													</td>
+													<td style="width: 130px"> {{record.appSecurityOriginName}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.securityOriginAddress}}</td>
+													<td style="width: 130px">{{record.appSecurityDestinyName}}</td>
+													<td style="width: 130px">
+														{{record.appOperationsAudit.securityDestinyAddress}}</td>
+												</tr>
+											</ng-template>
+										</p-table>
+										<div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+											{{l('NoData')}}
+										</div>
+										<div class="primeng-paging-container">
+											<p-paginator [rows]="primengTableHelper.defaultRecordsCountPerPage"
+												#auditpaginator (onPageChange)="getAllOperationAudits($event)"
+												[totalRecords]="primengTableHelper.totalRecordsCount"
+												[rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
+											</p-paginator>
+											<span class="total-records-count">
+												{{l('TotalRecordsCount', primengTableHelper.totalRecordsCount)}}
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" (click)="close()">{{l("Cancel")}}</button>
+			</div>
+		</div>
+	</div>
+</div>

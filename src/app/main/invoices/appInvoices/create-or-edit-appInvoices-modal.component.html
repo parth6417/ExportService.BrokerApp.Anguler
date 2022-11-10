@@ -1,0 +1,298 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{ backdrop: 'static' }">
+
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span *ngIf="appInvoices.id">{{ l("EditAppInvoices") }}</span>
+                    <span *ngIf="!appInvoices.id">{{ l("CreateNewAppInvoices") }}</span>
+                </h4>
+                <button type="button" class="close" (click)="close()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <p-panel>
+                <ng-template pTemplate="header">
+                    {{ l("PendingOperationList") }}
+                </ng-template>
+
+                <div class="card card-custom">
+                    <div class="card-body" style="padding: 0;">
+                        <form class="kt-form" autocomplete="off">
+                            <div>
+                                <div class="row align-items-center">
+                                    <div class="col-xl-12">
+                                        <div class="form-row">
+                                            <div class="form-group m-form__group align-items-center col-6">
+                                                <label for="AppCustomersBusinessName">{{ l("AppCustomers") }}</label>
+                                                <div class="input-group">
+                                                    <input class="form-control" id="AppCustomersBusinessName"
+                                                        name="appCustomersBusinessName"
+                                                        [(ngModel)]="appCustomersBusinessName" type="text" disabled />
+                                                    <div *ngIf="!appInvoices.id" class="input-group-append">
+                                                        <button class="btn btn-primary blue"
+                                                            (click)="openSelectAppCustomersModal()" type="button">
+                                                            <i class="fa fa-search"></i> {{ l("Pick") }}
+                                                        </button>
+                                                    </div>
+                                                    <div *ngIf="!appInvoices.id" class="input-group-prepend">
+                                                        <button class="btn btn-danger btn-icon" type="button"
+                                                            (click)="setCustomerIdNull()">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <input class="form-control" name="customerId" [(ngModel)]="customerId"
+                                                    type="text" required hidden />
+                                            </div>
+
+
+
+                                            <div class="form-group m-form__group align-items-center col-6">
+                                                <label for="MinOperationDateFilter">{{l("OperationDateRange")}}</label>
+                                                <div class="input-group">
+                                                    <input class="form-control m-input" id="MinOperationDateFilter"
+                                                        name="MinOperationDateFilter" type="datetime" bsDatepicker
+                                                        placeholder="{{l('MinValue')}}"
+                                                        [(ngModel)]="minOperationDateFilter">
+                                                    <span style="line-height: 40px;padding: 0 15px 0 15px;"> &mdash;
+                                                    </span>
+                                                    <input class="form-control m-input" id="MaxOperationDateFilter"
+                                                        name="MaxOperationDateFilter" type="datetime" bsDatepicker
+                                                        placeholder="{{l('MaxValue')}}"
+                                                        [(ngModel)]="maxOperationDateFilter">
+                                                    <span class="input-group-btn">
+                                                        <button (click)="getAll()" class="btn btn-primary"
+                                                            type="submit"><i class="flaticon-search-1"></i></button>
+                                                    </span>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+
+                        <div class="row align-items-center">
+                            <!--<Primeng-Datatable-Start>-->
+                            <div class="primeng-datatable-container col-12" [busyIf]="primengTableHelper.isLoading">
+                                <p-table #dataTable (onLazyLoad)="getAll($event)" [value]="primengTableHelper.records"
+                                    rows="{{primengTableHelper.defaultRecordsCountPerPage}}" [paginator]="false"
+                                    [lazy]="true" [scrollable]="true" ScrollWidth="100%"
+                                    [responsive]="primengTableHelper.isResponsive"
+                                    [resizableColumns]="primengTableHelper.resizableColumns"
+                                    [(selection)]="selectedOperations" dataKey="id">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th style="width: 3rem">
+                                                <p-tableHeaderCheckbox #headerCheckbox
+                                                    (click)="selectHeaderOperation(headerCheckbox)">
+                                                </p-tableHeaderCheckbox>
+                                            </th>
+
+                                            <th style="width: 150px" pSortableColumn="operationDate">
+                                                {{l('OperationDate')}}
+                                                <p-sortIcon field="operationDate"></p-sortIcon>
+                                            </th>
+                                            <th style="width: 150px" pSortableColumn="customerFk.businessName">
+                                                {{l('BusinessName')}}
+                                                <p-sortIcon field="appCustomersBusinessName"></p-sortIcon>
+                                            </th>
+
+                                            <th style="width: 150px" pSortableColumn="certificateNumber">
+                                                {{l('CertificateNumber')}}
+                                                <p-sortIcon field="certificateNumber"></p-sortIcon>
+                                            </th>
+
+                                            <th style="width: 150px" pSortableColumn="operationNumber">
+                                                {{l('OperationNumber')}}
+                                                <p-sortIcon field="operationNumber"></p-sortIcon>
+                                            </th>
+
+                                            <th style="width: 150px" pSortableColumn="operationTotalARS">
+                                                {{l('OperationTotalARS')}}
+                                                <p-sortIcon field="operationTotalARS"></p-sortIcon>
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+
+                                    <ng-template pTemplate="body" let-record="$implicit">
+                                        <tr>
+                                            <td style="width: 3rem">
+                                                <p-tableCheckbox [value]="record"
+                                                    (click)="selectOperations(record,checkbox)" #checkbox>
+                                                </p-tableCheckbox>
+                                            </td>
+
+                                            <td style="width:150px">
+                                                <span *ngIf="record.operationDate">
+                                                    {{record.operationDate | date:'dd/MM/yyyy'}}
+                                                </span>
+                                                <span *ngIf="!record.operationDate">-</span>
+                                            </td>
+
+                                            <td style="width:150px">
+                                                {{record.clientBusinessName}}
+                                            </td>
+
+                                            <td style="width:150px">
+                                                {{record.certificateNumber}}
+                                            </td>
+
+                                            <td style="width:150px">
+                                                {{record.operationNumber}}
+                                            </td>
+
+                                            <td style="width:150px">
+                                                {{record.operationTotalARS | number: '.2'}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                                <div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                                    {{l('NoData')}}
+                                </div>
+                                <div class="primeng-paging-container">
+                                    <p-paginator [rows]="primengTableHelper.defaultRecordsCountPerPage" #paginator
+                                        (onPageChange)="getAll($event)"
+                                        [totalRecords]="primengTableHelper.totalRecordsCount"
+                                        [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
+                                    </p-paginator>
+                                    <span class="total-records-count">
+                                        {{l('TotalRecordsCount', primengTableHelper.totalRecordsCount)}}
+                                    </span>
+                                </div>
+                            </div>
+                            <!--<Primeng-Datatable-End>-->
+                        </div>
+                    </div>
+                </div>
+            </p-panel>
+            <p-panel>
+                <ng-template pTemplate="header">
+                    {{ l("SelectedOperationList") }}
+                </ng-template>
+                <div class="card card-custom">
+                    <div class="card-body" style="padding: 0;">
+                        <div class="row align-items-center">
+                            <!--<Primeng-Datatable-Start>-->
+                            <div class="primeng-datatable-container col-12" [busyIf]="primengTableHelper.isLoading">
+                                <p-table #dataTable [value]="appInvoices.appOperationsInvoices" [paginator]="false"
+                                    [lazy]="true" [scrollable]="true" ScrollWidth="100%"
+                                    [responsive]="primengTableHelper.isResponsive"
+                                    [resizableColumns]="primengTableHelper.resizableColumns" dataKey="id">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th style="width: 150px" pSortableColumn="operationDate">
+                                                {{l('OperationDate')}}
+                                                <p-sortIcon field="operationDate"></p-sortIcon>
+                                            </th>
+
+
+                                            <th style="width: 150px" pSortableColumn="certificateNumber">
+                                                {{l('CertificateNumber')}}
+                                                <p-sortIcon field="certificateNumber"></p-sortIcon>
+                                            </th>
+
+                                            <th style="width: 150px" pSortableColumn="operationNumber">
+                                                {{l('OperationNumber')}}
+                                                <p-sortIcon field="operationNumber"></p-sortIcon>
+                                            </th>
+
+                                            <th style="width: 150px" pSortableColumn="operationTotalARS">
+                                                {{l('OperationTotalARS')}}
+                                                <p-sortIcon field="operationTotalARS"></p-sortIcon>
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+
+                                    <ng-template pTemplate="body" let-record>
+                                        <tr>
+                                            <td style="width:150px">
+                                                <span *ngIf="record.operationFk.operationDate">
+                                                    {{record.operationFk.operationDate | date:'dd/MM/yyyy'}}
+                                                </span>
+                                                <span *ngIf="!record.operationFk.operationDate">-</span>
+                                            </td>
+                                            <td style="width:150px">
+                                                {{record.operationFk.certificateNumber}}
+                                            </td>
+
+                                            <td style="width:150px">
+                                                {{record.operationFk.operationNumber}}
+                                            </td>
+
+                                            <td style="width:150px">
+                                                {{record.operationFk.operationTotalARS | number: '.2'}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+
+                                    <ng-template pTemplate="summary">
+                                        <div class="p-d-flex p-ai-center p-jc-between">
+                                            {{l('TotalInvoiceAmount')}} : {{appInvoices.invoiceTotal | number: '.2'}}
+                                        </div>
+                                    </ng-template>
+
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-panel>
+
+            <br />
+
+            <form #ObservationForm="ngForm" novalidate autocomplete="off">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <label class="checkbox">
+                                <input [(ngModel)]="IsGroupInvoice" type="checkbox"
+                                    name="IsGroupInvoice" value="false" />
+                                <span></span>
+                                {{"Agrupar" | localize}}
+                            </label>
+                        </div>
+                    </div>
+                    <ng-template [ngIf]="IsGroupInvoice">
+                        <input type="text" id="GeneralObservationInfo" class="form-control"
+                            [(ngModel)]="GeneralObservationInfo" name="GeneralObservationInfo" required />
+                    </ng-template>
+                </div>
+            </form>
+
+
+            <div class="modal-footer">
+                <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{
+                    l("Cancel")
+                    }}</button>
+
+                    <button type="button" class="btn btn-info green" (click)="openManualVoucher()"
+                    [buttonBusy]="saving"
+                    [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                    <span>{{l("Vincular")}}</span></button>
+
+
+                <button type="button" class="btn btn-primary blue" (click)="save()"
+                    [disabled]="!ObservationForm.form.valid" [buttonBusy]="saving"
+                    [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                    <span>{{l("Save")}}</span></button>
+
+            </div>
+        </div>
+    </div>
+
+    <appInvoicesAppCustomersLookupTableModal #appInvoicesAppCustomersLookupTableModal (modalSave)="getNewCustomerId()">
+    </appInvoicesAppCustomersLookupTableModal>
+
+    <appInvoicesManualVoucherModalModal #appInvoicesManualVoucherModalModal (modalSave)="getManualVoucherInfo()">
+    </appInvoicesManualVoucherModalModal>
+
+
+
+</div>

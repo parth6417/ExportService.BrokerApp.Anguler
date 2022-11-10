@@ -1,0 +1,143 @@
+<form #appInsuranceCommissionForm="ngForm" novalidate (ngSubmit)="wizerdContinue()" autocomplete="off">
+    <div class="form-row">
+        <!-- Precios Section -->
+
+        <div class="form-group  col-6">
+        
+            <select id="AppCustomers_insuranceCalculationBase" 
+            name="AppCustomers_insuranceCalculationBase" 
+            [(ngModel)]="appCustomers.insuranceCalculationBase"
+                class="form-control" required>
+                <option disabled selected value="undefined">{{l("insuranceCalculationBase")}} *</option>
+                <option value="MARKUP">Markup</option>
+                <option value="BILLING">Facturación</option>
+            </select>
+
+        </div>
+
+        <div class="form-group  col-6">
+            <!-- <label
+                for="AppCustomers_insuranceToDistributeTotalPercentage">{{l("insuranceToDistributeTotalPercentage")}}</label> -->
+            <input type="number" id="AppCustomers_insuranceToDistributeTotalPercentage" name="AppCustomers_insuranceToDistributeTotalPercentage" class="form-control"
+                [(ngModel)]="appCustomers.insuranceToDistributeTotalPercentage"
+                required
+                placeholder="{{l('insuranceToDistributeTotalPercentage')}} *" />
+        </div>
+
+
+
+        <div class="form-group col-6">
+            <!-- <label for="UserName">{{l("User")}}</label> -->
+            <select id="appCustomers_insuranceCommission_userId" name="appCustomers_insuranceCommission_userId" [(ngModel)]="insuranceCommission.userId"
+                class="form-control" required>
+                <option disabled selected value="0">{{l("SelectAVendedor")}}</option>
+                <option *ngFor="let item of allUsers" value="{{item.id}}">{{item.displayName}}</option>
+            </select>
+        </div>
+
+
+        <div class="form-group col-6">
+            <!-- <label for="AppInsuranceCommission_CommissionPercentage">{{l("CommissionPercentage")}}</label> -->
+            <input type="number" id="AppInsuranceCommission_CommissionPercentage" name="AppInsuranceCommission_CommissionPercentage" class="form-control"
+                [(ngModel)]="insuranceCommission.commissionPercentage"
+                required
+                placeholder="{{l('CommissionPercentage')}}" />
+        </div>
+
+        <div class=" form-group col-12">
+            <div class="btn-toolbar" role="toolbar" style="justify-content: flex-end;">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-info"
+                        (click)="addInsuranceCommission()"
+                        [disabled]="addInsuranceCommissionValidation()==false">
+                        <i class="fas fa-plus-square"></i>
+                        {{l("btnAddInsuranceComissionList")}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            <h6>
+                {{l("InsuranceCommissionDatatable")}}
+            </h6>
+        </div>
+    </div>
+
+
+    <div class="row align-items-center">
+
+        <!--<Primeng-Datatable-Start>-->
+        <div class="primeng-datatable-container col-12" [busyIf]="primengTableHelper.isLoading">
+            <p-table #dataTable (onLazyLoad)="loadInsuranceCommission()" [value]="primengTableHelper.records"
+                [paginator]="false" ScrollWidth="100%" [responsive]="primengTableHelper.isResponsive">
+                <ng-template pTemplate="header">
+                    <tr>
+                      
+                        <th style="width: 150px" pSortableColumn="userName">
+                            {{l('VendedorName')}}
+                            <p-sortIcon field="record.userName"></p-sortIcon>
+                        </th>
+
+                        <th style="width: 150px" pSortableColumn="commissionPercentage">
+                            {{l('CommissionPercentage')}}
+                            <p-sortIcon field="record.commissionPercentage"></p-sortIcon>
+
+                        </th>
+                        <th style="width: 150px">
+                            {{l('Actions')}}
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-record="$implicit"  let-rowIndex="rowIndex">
+                    <tr>
+                        <td style="width:150px">
+                            <span class="ui-column-title">
+                                {{record.userName}}</span>
+                        </td>
+                        <td style="width:150px">
+                            <span class="ui-column-title">
+                                {{record.commissionPercentage}}</span>
+                        </td>
+                        <td style="width:150px">
+                            <a href="javascript:;"
+                            *ngIf="permission.isGranted('Pages.AppInsuranceCommission.Delete')"
+                            (click)="deleteInsuranceCommission(record,rowIndex)">{{l('Delete')}}</a>
+                        </td>
+
+                    </tr>
+                </ng-template>
+
+            </p-table>
+            <div class="ui-table-footer">
+                <!-- <div role="actions" class="pull-right">
+                    <button type="button" *ngIf="primengTableHelper.totalRecordsCount != 0"
+                        (click)="RemoveAllSecurityRequirements()" class="btn btn-sm btn-danger">
+                        {{l("btnRemoveAll")}}
+                    </button>
+                </div> -->
+            </div>
+        </div>
+
+
+
+    </div>
+    <!--<Primeng-Datatable-End>-->
+    <div class="footer pull-right">
+       
+
+            <button [disabled]="saving" type="button" class="btn btn-warning" (click)="close()">{{l("Cancel")}}</button>
+            <button [disabled]="saving" type="button" class="btn btn-danger" (click)="returnPreviousTab()">{{l("btnReturnPrevious")}}</button>
+            <button type="submit" class="btn btn-primary blue" 
+                  [disabled]="appInsuranceCommissionFormValid()==false "
+                [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                <span>{{l("btnContinueNext")}}</span></button>
+    </div>
+</form>

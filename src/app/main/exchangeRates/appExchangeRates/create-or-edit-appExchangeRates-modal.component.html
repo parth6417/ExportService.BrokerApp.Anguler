@@ -1,0 +1,60 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #appExchangeRatesForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="appExchangeRates.id">{{l("EditAppExchangeRates")}}</span>
+                        <span *ngIf="!appExchangeRates.id">{{l("CreateNewAppExchangeRates")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+
+
+                    <div class="form-group">
+                        <label for="AppExchangeRates_Currency">{{l("Currency")}} *</label>
+
+                        <select name="AppExchangeRates_Currency" [(ngModel)]="appExchangeRates.currency"
+                            class="form-control" required>
+                            <option value="" disabled selected>{{l("Currency")}} *</option>
+                            <option value="USD">USD</option>
+                            <option value="ARS">ARS</option>
+                            <option value="CLP">CLP</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="AppExchangeRates_ExchangeRate">{{l("ExchangeRate")}}</label>
+                        <input type="number" id="AppExchangeRates_ExchangeRate" class="form-control"
+                            [(ngModel)]="appExchangeRates.exchangeRate" name="ExchangeRate" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="AppExchangeRates_ExchangeDate">{{l("ExchangeDate")}}</label>
+                        <input required class="form-control m-input" type="datetime" bsDatepicker
+                            datePickerLuxonModifier [(date)]="appExchangeRates.exchangeDate"
+                            id="AppExchangeRates_ExchangeDate" name="AppExchangeRates_ExchangeDate"
+                            placeholder="{{l('ExchangeDate')}} *">
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default"
+                        (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!appExchangeRatesForm.form.valid"
+                        [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                        <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

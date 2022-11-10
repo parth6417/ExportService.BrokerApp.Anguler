@@ -1,0 +1,1176 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+	aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+
+	<div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+
+		<!--begin::Content-->
+		<div class="content d-flex flex-column flex-column-fluid" id="kt_content"
+			style="background-color: darkgrey; width: 100% !important;">
+			<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+				<div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+					<!--begin::Info-->
+					<div class="d-flex align-items-center flex-wrap mr-1">
+						<!--begin::Page Heading-->
+						<div class="d-flex align-items-baseline flex-wrap mr-5">
+							<!--begin::Page Title-->
+							<h5 class="text-dark font-weight-bold my-1 mr-5">OPERACIÓN</h5>
+							<!--end::Page Title-->
+						</div>
+						<!--end::Page Heading-->
+					</div>
+					<!--end::Info-->
+					<!--begin::Toolbar-->
+					<div class="d-flex align-items-center">
+						<!--begin::Actions-->
+						<!-- <a href="#" class="btn btn-light-primary font-weight-bolder btn-sm">Close</a> -->
+
+						<button type="button" class="close btn btn-light-primary font-weight-bolder btn-sm"
+							(click)="close()" aria-label="Close" [disabled]="saving">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<!--end::Actions-->
+
+					</div>
+					<!--end::Toolbar-->
+				</div>
+			</div>
+
+			<!--begin::Entry-->
+			<div class="d-flex flex-column-fluid">
+				<!--begin::Container-->
+				<div class="container-fluid">
+					<div class="card card-custom">
+						<div class="card-body p-0">
+
+
+							<!--begin: Wizard-->
+							<div class="wizard wizard-3" id="kt_wizard_v3" data-wizard-state="first"
+								data-wizard-clickable="true">
+								<!--begin: Wizard Nav-->
+								<div class="wizard-nav">
+									<div class="wizard-steps px-8 py-8 px-lg-15 py-lg-3">
+										<!--begin::Wizard Step 1 Nav-->
+										<div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
+											<div class="wizard-label">
+												<h3 class="wizard-title">
+													<!-- <span>1.</span>Setup Location -->
+													{{l("lblOperationTab1")}}
+												</h3>
+												<div class="wizard-bar"></div>
+											</div>
+										</div>
+										<!--end::Wizard Step 1 Nav-->
+										<!--begin::Wizard Step 2 Nav-->
+										<div class="wizard-step" data-wizard-type="step" data-wizard-state="pending">
+											<div class="wizard-label">
+												<h3 class="wizard-title">
+													<!-- <span>2.</span>Enter Details -->
+													{{l("lblOperationTab2")}}
+												</h3>
+												<div class="wizard-bar"></div>
+											</div>
+										</div>
+										<!--end::Wizard Step 2 Nav-->
+										<!--begin::Wizard Step 3 Nav-->
+										<div class="wizard-step" data-wizard-type="step" data-wizard-state="pending">
+											<div class="wizard-label">
+												<h3 class="wizard-title">
+													<!-- <span>3.</span>Select Services -->
+													{{l("lblOperationTab3")}}
+												</h3>
+												<div class="wizard-bar"></div>
+											</div>
+										</div>
+										<!--end::Wizard Step 3 Nav-->
+										<!--begin::Wizard Step 4 Nav-->
+										<div class="wizard-step" data-wizard-type="step" data-wizard-state="pending">
+											<div class="wizard-label">
+												<h3 class="wizard-title">
+													{{l("lblOperationTab4")}}
+												</h3>
+												<div class="wizard-bar"></div>
+											</div>
+										</div>
+										<!--end::Wizard Step 4 Nav-->
+									</div>
+								</div>
+								<!--end: Wizard Nav-->
+								<!--begin: Wizard Body-->
+								<div class="row justify-content-center py-10 px-8 py-lg-12 px-lg-10"
+									style="padding-top: 0px !important;">
+									<div class="col-12">
+										<!--begin: Wizard Form-->
+										<form #operationForm="ngForm"
+											class="form fv-plugins-bootstrap fv-plugins-framework" id="kt_form">
+											<!--begin: Wizard Step 1-->
+											<div class="pb-5" data-wizard-type="step-content"
+												data-wizard-state="current">
+												<h4 class="mb-10 font-weight-bold text-dark" *ngIf="functionAdd">
+													{{l("lblOperationTab1Header")}}
+												</h4>
+												<h4 class="mb-10 font-weight-bold text-dark" *ngIf="functionEdit">
+													{{l("lblOperationTab1HeaderForEdit")}}
+												</h4>
+												<h4 class="mb-10 font-weight-bold text-dark" *ngIf="functionDuplicate">
+													{{l("lblOperationTab1HeaderForCopy")}}
+												</h4>
+												<div class="form-row">
+
+													<!--begin::Input-->
+													<div class="form-group col-6">
+														<label
+															for="AppOperations_OperationNumber">{{l("OperationNumber")}}
+															<span style="color: red;">*</span> </label>
+														<input  type="text" id="AppOperations_OperationNumber"
+															class="form-control"
+															[(ngModel)]="appOperations.operationNumber"
+															name="OperationNumber" minlength="0" maxlength="80"
+															required />
+													</div>
+
+													<div class="form-group col-6">
+														<label
+															for="AppOperations_OperationState">{{l("OperationState")}}
+															<span style="color: red;">*</span> </label>
+														<select id="AppOperations_OperationState"
+															name="AppOperations_OperationState"
+															[(ngModel)]="appOperations.operationState"
+															class="form-control" required>
+															<!-- <option selected="selected" value="">{{l("SelectAAppProviders")}}</option> -->
+															<option disabled selected value="undefined"></option>
+															<option value="AVAILABLE">Habilitada</option>
+															<option value="CANCELLED">Anulada</option>
+														</select>
+													</div>
+
+													<!--end::Input-->
+
+
+													<!--begin::Input-->
+													<div class="form-group m-form__group col-6">
+														<label for="AppCustomersClientName">{{l("lblClient")}} <span
+																style="color: red;">*</span> </label>
+														<div class="input-group">
+															<input class="form-control" id="AppCustomersClientName"
+																name="ClientBusinessName"
+																[(ngModel)]="ClientBusinessName" type="text" disabled
+																required
+																[ngClass]="{'ng-invalid ng-touched': ClientBusinessNameValid === false}">
+															<div class="input-group-append">
+																<button class="btn btn-primary blue"
+																	(click)="openSelectClientModal()" type="button"><i
+																		class="fa fa-search"></i>
+																	<!-- {{l("Pick")}} -->
+																</button>
+															</div>
+															<div class="input-group-prepend">
+																<button class="btn btn-danger btn-icon" type="button"
+																	(click)="setCustomerIdNull()"><i
+																		class="fa fa-times"></i></button>
+															</div>
+														</div>
+														<input class="form-control" name="appOperations.customerId"
+															[(ngModel)]="appOperations.customerId" type="text" hidden>
+
+													</div>
+
+													<div class="form-group m-form__group col-6">
+														<label
+															for="AppCustomersBusinessName">{{l("lblBillingCustomerId")}}
+															<span style="color: red;">*</span> </label>
+														<div class="input-group">
+															<input class="form-control" id="AppCustomersBusinessName"
+																name="appCustomersBusinessName"
+																[(ngModel)]="BillingClientBusinessName" type="text"
+																disabled
+																[ngClass]="{'ng-invalid ng-touched': BillingClientBusinessNameValid === false}">
+															<div class="input-group-append">
+																<button class="btn btn-primary blue"
+																	(click)="openSelectBillingClientModal()"
+																	type="button"><i class="fa fa-search"></i>
+																	<!-- {{l("Pick")}} -->
+																</button>
+															</div>
+															<div class="input-group-prepend">
+																<button class="btn btn-danger btn-icon" type="button"
+																	(click)="setBillingCustomerIdNull()"><i
+																		class="fa fa-times"></i></button>
+															</div>
+														</div>
+														<input class="form-control"
+															name="appOperations.billingCustomerId"
+															[(ngModel)]="appOperations.billingCustomerId" type="text"
+															hidden>
+
+													</div>
+													<!--end::Input-->
+
+													<!--begin::Input-->
+													<div class="form-group col-4">
+														<label for="AppOperations_OperationType">{{l("OperationType")}}
+															<span style="color: red;">*</span> </label>
+
+														<select id="AppOperations_OperationType"
+															name="AppOperations_OperationType"
+															[(ngModel)]="appOperations.operationType"
+															(ngModelChange)="setClientPolicyIdNull()"
+															class="form-control" required>
+															<!-- <option selected="selected" value="">{{l("SelectAAppProviders")}}</option> -->
+															<option disabled selected value="undefined"></option>
+															<option value="NATIONAL">Nacional</option>
+															<option value="INTERNATIONAL">Internacional</option>
+															<!-- <option value="NATIONAL_INTERNATIONAL">Nacional/Internacional</option> -->
+														</select>
+													</div>
+													<div class="form-group col-4">
+														<label for="AppOperations_ContainerType">{{l("ContainerType")}}
+															<span style="color: red;">*</span></label>
+
+														<select id="AppOperations_ContainerType"
+															name="AppOperations_ContainerType"
+															[(ngModel)]="appOperations.containerType"
+															(ngModelChange)="setClientPolicyIdNull()"
+															class="form-control" required>
+															<!-- <option selected="selected" value="">{{l("SelectAAppProviders")}}</option> -->
+															<option disabled selected value="undefined"></option>
+															<option value="DRY">Dry</option>
+															<option value="REEFER">Reefer</option>
+														</select>
+
+													</div>
+
+													<div class="form-group col-4">
+														<label for="AppOperations_OperationDate">{{l("OperationDate")}}
+															<span style="color: red;">*</span></label>
+														<!-- <input id="AppOperations_OperationDate"
+															name="AppOperations_OperationDate" required
+															class="form-control" type="text" bsDatepicker
+															datePickerLuxonModifier
+															[(date)]="appOperations.operationDate"
+															(bsValueChange)="getExchangeRate()"> -->
+														<input id="AppOperations_OperationDate" type="text"
+															name="AppOperations_OperationDate" class="form-control"
+															#AppOperations_OperationDate bsDatepicker datePickerLuxonModifier
+															[(date)]="appOperations.operationDate"
+															[bsConfig]="{ adaptivePosition: true }"
+															(bsValueChange)="getExchangeRate()" />
+
+													</div>
+
+
+													<!--end::Input-->
+
+													<!--begin::Input-->
+
+													<div class="form-group col-6">
+														<label
+															for="AppOperations_TransportType">{{l("TransportType")}}</label>
+														<input type="text" id="AppOperations_TransportType"
+															class="form-control"
+															[(ngModel)]="appOperations.transportType"
+															name="TransportType" minlength="0" maxlength="255" />
+													</div>
+
+													<div class="form-group col-6">
+														<label for="AppOperations_CurrencyType">{{l("CurrencyType")}}
+															<span style="color: red;">*</span></label>
+														<select required id="AppOperations_CurrencyType"
+															name="AppOperations_CurrencyType"
+															[(ngModel)]="appOperations.currencyType"
+															(ngModelChange)='getExchangeRate()' class="form-control"
+															required>
+
+															<option disabled selected value="undefined"></option>
+															<option value="ARS">ARS</option>
+															<option value="USD">USD</option>
+														</select>
+													</div>
+
+													<!--end::Input-->
+
+													<!--begin::Input-->
+													<div class="form-group m-form__group col-4">
+														<label
+															for="appOperations_originLocationId">{{l("lblOriginLocations")}}
+															<span style="color: red;">*</span></label>
+														<select required name="appOperations_originLocationId"
+															[(ngModel)]="appOperations.originLocationId"
+															class="form-control">
+															<option disabled selected value="undefined"></option>
+															<option *ngFor="let item of allAppLocationss"
+																value="{{item.id}}">{{item.displayName}}</option>
+														</select>
+													</div>
+													<div class="form-group col-8">
+														<label
+															for="AppOperations_OriginAddress">{{l("OriginAddress")}}</label>
+														<input type="text" id="AppOperations_OriginAddress"
+															class="form-control"
+															[(ngModel)]="appOperations.originAddress"
+															name="OriginAddress" minlength="0" maxlength="255" />
+													</div>
+													<!--end::Input-->
+
+													<!--begin::Input-->
+													<div class="form-group m-form__group col-4">
+														<label
+															for="appOperations_destinyLocationId">{{l("lblDestinationLocations")}}
+															<span style="color: red;">*</span> </label>
+														<select required name="appOperations_destinyLocationId"
+															[(ngModel)]="appOperations.destinyLocationId"
+															class="form-control">
+															<option disabled selected value="undefined"></option>
+															<option *ngFor="let item of allAppLocationss"
+																value="{{item.id}}">{{item.displayName}}</option>
+														</select>
+													</div>
+													<div class="form-group col-8">
+														<label
+															for="AppOperations_DestinyAddress">{{l("DestinyAddress")}}</label>
+														<input type="text" id="AppOperations_DestinyAddress"
+															class="form-control"
+															[(ngModel)]="appOperations.destinyAddress"
+															name="DestinyAddress" minlength="0" maxlength="255" />
+													</div>
+													<!--end::Input-->
+
+													<!--begin::Input-->
+													<div class="form-group m-form__group col-6">
+														<label for="appOperations_zoneId">{{l("lblZones")}} <span
+																style="color: red;">*</span></label>
+														<select required name="appOperations_zoneId"
+															[(ngModel)]="appOperations.zoneId" class="form-control">
+															<option disabled selected value="undefined">
+															</option>
+															<option *ngFor="let item of allAppZoness"
+																value="{{item.id}}">{{item.displayName}}</option>
+														</select>
+													</div>
+													<div class="form-group m-form__group col-6">
+														<label for="AppPortsName">{{l("lblPorts")}}</label>
+														<select name="appOperations.portId"
+															[(ngModel)]="appOperations.portId" class="form-control">
+															<option disabled selected value="undefined">
+															</option>
+															<option *ngFor="let item of allAppPortss"
+																value="{{item.id}}">{{item.displayName}}</option>
+														</select>
+
+													</div>
+
+
+													<!--end::Input-->
+
+													<!--begin::Input-->
+													<div class="form-group col-6">
+														<label for="AppOperations_Voucher">{{l("Voucher")}}</label>
+														<input type="text" id="AppOperations_Voucher"
+															class="form-control" [(ngModel)]="appOperations.voucher"
+															name="Voucher" minlength="0" maxlength="255" />
+													</div>
+													<div class="form-group m-form__group col-6">
+														<label
+															for="AppCommoditesTypesName">{{l("lblCommoditesTypes")}}</label>
+														<select name="appOperations.commodityTypeId"
+															[(ngModel)]="appOperations.commodityTypeId"
+															class="form-control">
+															<option disabled selected value="undefined">
+															</option>
+															<option *ngFor="let item of allAppCommoditesTypess"
+																value="{{item.id}}">{{item.displayName}}</option>
+														</select>
+													</div>
+													<!--end::Input-->
+
+													<!--begin::Input-->
+
+													<div class="form-group col-12">
+														<label
+															for="AppOperations_GeneralObservations">{{l("GeneralObservations")}}</label>
+															<input type="text" id="AppOperations_GeneralObservations"
+															class="form-control"
+															[(ngModel)]="appOperations.generalObservations"
+															name="AppOperations_GeneralObservations" minlength="0" maxlength="200" />
+														<!-- <textarea id="AppOperations_GeneralObservations" rows="5"
+															name="AppOperations_GeneralObservations"
+															class="form-control" row=3 style="resize: none;"
+															[ngClass]="{'edited':appOperations.generalObservations}"
+															[(ngModel)]="appOperations.generalObservations"
+															maxlength="200"></textarea>
+														 -->
+														<!-- <p-editor minlength="0" maxlength="200"
+															[(ngModel)]="appOperations.generalObservations"
+															id="AppOperations_GeneralObservations"
+															name="AppOperations_GeneralObservations"
+															[style]="{'height':'300px'}"></p-editor> -->
+
+
+													</div>
+													<!--end::Input-->
+													<!--begin::Input-->
+													<div class="form-group col-12">
+														<label
+															for="AppOperations_CertificateObservations">{{l("CertificateObservations")}}</label>
+
+														<!-- <textarea id="AppOperations_CertificateObservations" rows="5"
+															name="AppOperations_CertificateObservations"
+															class="form-control" row=5 style="resize: none;"
+															[ngClass]="{'edited':appOperations.certificateObservations}"
+															[(ngModel)]="appOperations.certificateObservations"
+															maxlength="1000"></textarea>
+														 -->
+
+														<p-editor minlength="0" maxlength="1000"
+															[(ngModel)]="appOperations.certificateObservations"
+															id="AppOperations_CertificateObservations"
+															name="AppOperations_CertificateObservations"
+															[style]="{'height':'300px'}"></p-editor>
+
+
+
+													</div>
+													<!--end::Input-->
+
+													<!--begin::Input-->
+													<div class="form-group">
+														<label>Servicios incluidos</label>
+														<div class="checkbox-inline">
+															<label class="checkbox">
+																<input type="checkbox"
+																	[(ngModel)]="appOperations.insuranceService"
+																	name="insuranceService"  >
+																<span></span>Seguros</label>
+															<label class="checkbox">
+																<input type="checkbox" name="securityService"
+																	[(ngModel)]="appOperations.securityService" >
+																<span></span>Seguridad</label>
+														</div>
+													</div>
+													<!--end::Input-->
+
+
+												</div>
+
+											</div>
+											<!--end: Wizard Step 1-->
+
+											<!--begin: Wizard Step 2-->
+											<div class="pb-5" data-wizard-type="step-content">
+												<h4 class="mb-10 font-weight-bold text-dark">
+													<h4 class="mb-10 font-weight-bold text-dark" *ngIf="functionAdd">
+														{{l("lblOperationTab1Header")}}
+													</h4>
+													<h4 class="mb-10 font-weight-bold text-dark" *ngIf="functionEdit">
+														{{l("lblOperationTab1HeaderForEdit")}}
+													</h4>
+													<h4 class="mb-10 font-weight-bold text-dark"
+														*ngIf="functionDuplicate">
+														{{l("lblOperationTab1HeaderForCopy")}}
+													</h4>
+												</h4>
+												<div class="form-row">
+													<div class="form-group m-form__group col-6">
+														<label for="ClientBusinessName2">{{l("lblClient")}} <span
+																style="color: red;">*</span> </label>
+
+														<input class="form-control" id="ClientBusinessName2"
+															name="ClientBusinessName2" [(ngModel)]="ClientBusinessName"
+															type="text" disabled>
+													</div>
+													<div class="form-group col-6">
+														<label for="AppOperations_RateOfSale">{{l("RateOfSale")}} <span
+																style="color: red;">*</span> </label>
+														<input type="number" id="AppOperations_RateOfSale"
+															class="form-control" [(ngModel)]="appOperations.rateOfSale"
+															inputmode="numeric" name="AppOperations_RateOfSale"
+															required />
+													</div>
+
+
+													<div class="form-group m-form__group col-6">
+														<label for="AppPoliciesPolicyName">{{l("lblClientPolicy")}}
+															<span style="color: red;">*</span> </label>
+														<div class="input-group">
+															<input class="form-control" id="AppPoliciesPolicyName"
+																name="appPoliciesPolicyName"
+																[(ngModel)]="appPoliciesPolicyName" type="text" required
+																disabled
+																[ngClass]="{'ng-invalid ng-touched': PoliciesPolicyNameValid === false}">
+															<div class="input-group-append">
+																<button class="btn btn-primary blue"
+																	(click)="openSelectClientPoliciesModal()"
+																	type="button"><i class="fa fa-search"></i>
+																	{{l("Pick")}}</button>
+															</div>
+															<div class="input-group-prepend">
+																<button class="btn btn-danger btn-icon" type="button"
+																	(click)="setClientPolicyIdNull()"><i
+																		class="fa fa-times"></i></button>
+															</div>
+														</div>
+														<input class="form-control" name="appOperations.policyId"
+															[(ngModel)]="appOperations.policyId" type="text" hidden>
+
+													</div>
+
+													<div class="form-group col-3">
+														<label
+															for="AppOperations_CertificateNumber">{{l("CertificateNumber")}}</label>
+														<input type="number" id="AppOperations_CertificateNumber"
+															class="form-control"
+															[(ngModel)]="appOperations.certificateNumber"
+															name="CertificateNumber" disabled />
+													</div>
+
+													<div class="form-group col-3" *ngIf="permission.isGranted('Pages.AppOperations.ProfileAdministrator')" >
+														<label
+															for="AppOperations_CostPercentage">{{l("CostPercentage")}}
+															<span style="color: red;">*</span> </label>
+														<input type="number" id="AppOperations_CostPercentage"
+															class="form-control"
+															[(ngModel)]="appOperations.costPercentage"
+															name="AppOperations_CostPercentage" required />
+													</div>
+
+
+													<div class="form-group col-5">
+														<label
+															for="AppOperations_InsuredAmountARS">{{l("InsuredAmountARS")}}</label>
+														<input type="number" id="AppOperations_InsuredAmountARS"
+															class="form-control"
+															[(ngModel)]="appOperations.insuredAmountARS"
+															name="InsuredAmountARS" disabled />
+													</div>
+													<div class="form-group col-2">
+														<label
+															for="AppOperations_ExchangeRate">{{l("lblExchangeRate")}}</label>
+														<input type="number" id="AppOperations_ExchangeRate"
+															class="form-control"
+															[(ngModel)]="appOperations.exchangeRate"
+															name="AppOperations_ExchangeRate" disabled />
+													</div>
+													<div class="form-group col-5">
+														<label
+															for="AppOperations_InsuredAmountUSD">{{l("InsuredAmountUSD")}}</label>
+														<input type="number" id="AppOperations_InsuredAmountUSD"
+															class="form-control"
+															[(ngModel)]="appOperations.insuredAmountUSD"
+															name="InsuredAmountUSD" disabled />
+													</div>
+
+													<div class="form-group col-5">
+														<label for="AppOperations_BillAmountARS">{{l("BillAmountARS")}}
+															<span style="color: red;">*</span></label>
+														<input type="number" id="AppOperations_BillAmountARS"
+															class="form-control"
+															[(ngModel)]="appOperations.billAmountARS"
+															name="AppOperations_BillAmountARS" required
+															(ngModelChange)="onInsuredAmountARSChange()" />
+													</div>
+													<div class="form-group col-2">
+													</div>
+													<div class="form-group col-5">
+														<label for="AppOperations_BillAmountUSD">{{l("BillAmountUSD")}}
+															<span style="color: red;">*</span></label>
+														<input type="number" id="AppOperations_BillAmountUSD"
+															class="form-control"
+															[(ngModel)]="appOperations.billAmountUSD"
+															name="AppOperations_BillAmountUSD" required
+															(ngModelChange)="onInsuredAmountUSDChange()" />
+													</div>
+
+													<div class="form-group col-5">
+														<label
+															for="AppOperations_FreightAmountARS">{{l("FreightAmountARS")}}</label>
+														<input type="number" id="AppOperations_FreightAmountARS"
+															class="form-control"
+															[(ngModel)]="appOperations.freightAmountARS"
+															name="FreightAmountARS"
+															(ngModelChange)="onInsuredAmountARSChange()" />
+													</div>
+													<div class="form-group col-2">
+													</div>
+
+													<div class="form-group col-5">
+														<label
+															for="AppOperations_FreightAmountUSD">{{l("FreightAmountUSD")}}</label>
+														<input type="number" id="AppOperations_FreightAmountUSD"
+															class="form-control"
+															[(ngModel)]="appOperations.freightAmountUSD"
+															name="FreightAmountUSD"
+															(ngModelChange)="onInsuredAmountUSDChange()" />
+													</div>
+
+													<div class="form-group col-5">
+														<label
+															for="AppOperations_DutiesAndChargesARS">{{l("DutiesAndChargesARS")}}</label>
+														<input type="number" id="AppOperations_DutiesAndChargesARS"
+															class="form-control"
+															[(ngModel)]="appOperations.dutiesAndChargesARS"
+															name="DutiesAndChargesARS"
+															(ngModelChange)="onInsuredAmountARSChange()" />
+													</div>
+													<div class="form-group col-2">
+													</div>
+													<div class="form-group col-5">
+														<label
+															for="AppOperations_DutiesAndChargesUSD">{{l("DutiesAndChargesUSD")}}</label>
+														<input type="number" id="AppOperations_DutiesAndChargesUSD"
+															class="form-control"
+															[(ngModel)]="appOperations.dutiesAndChargesUSD"
+															name="DutiesAndChargesUSD"
+															(ngModelChange)="onInsuredAmountUSDChange()" />
+													</div>
+
+													<div class="form-group col-5">
+														<label
+															for="AppOperations_ImaginaryBenefitARS">{{l("ImaginaryBenefitARS")}}</label>
+														<input type="number" id="AppOperations_ImaginaryBenefitARS"
+															class="form-control"
+															[(ngModel)]="appOperations.imaginaryBenefitARS"
+															name="ImaginaryBenefitARS"
+															(ngModelChange)="onInsuredAmountARSChange()" />
+													</div>
+													<div class="form-group col-2">
+													</div>
+													<div class="form-group col-5">
+														<label
+															for="AppOperations_ImaginaryBenefitUSD">{{l("ImaginaryBenefitUSD")}}</label>
+														<input type="number" id="AppOperations_ImaginaryBenefitUSD"
+															class="form-control"
+															[(ngModel)]="appOperations.imaginaryBenefitUSD"
+															name="ImaginaryBenefitUSD"
+															(ngModelChange)="onInsuredAmountUSDChange()" />
+													</div>
+
+
+												</div>
+											</div>
+											<!--end: Wizard Step 2-->
+											<!--begin: Wizard Step 3-->
+											<div class="pb-5" data-wizard-type="step-content">
+												<h4 class="mb-10 font-weight-bold text-dark">
+													<h4 class="mb-10 font-weight-bold text-dark" *ngIf="functionAdd">
+														{{l("lblOperationTab1Header")}}
+													</h4>
+													<h4 class="mb-10 font-weight-bold text-dark" *ngIf="functionEdit">
+														{{l("lblOperationTab1HeaderForEdit")}}
+													</h4>
+													<h4 class="mb-10 font-weight-bold text-dark"
+														*ngIf="functionDuplicate">
+														{{l("lblOperationTab1HeaderForCopy")}}
+													</h4>
+												</h4>
+												<div class="form-row">
+
+													<div class="form-group m-form__group col-4">
+														<label for="AppOperations_TransportType1">{{l("TransportType")}}
+															<span style="color: red;">*</span> </label>
+														<div class="input-group">
+															<input class="form-control"
+																id="AppOperations_TransportType1"
+																name="AppOperations_TransportType1"
+																[(ngModel)]="appTransportsName" type="text" disabled
+																required
+																[ngClass]="{'ng-invalid ng-touched': TransportsNameValid === false}">
+															<div class="input-group-append">
+																<button class="btn btn-primary blue"
+																	(click)="openSelectTransportModal()"
+																	type="button"><i class="fa fa-search"></i>
+																	<!-- {{l("Pick")}} -->
+																</button>
+															</div>
+															<div class="input-group-prepend">
+																<button class="btn btn-danger btn-icon" type="button"
+																	(click)="setTransportIdNull()"><i
+																		class="fa fa-times"></i></button>
+															</div>
+														</div>
+														<input class="form-control" name="appOperations.transportId"
+															[(ngModel)]="appOperations.transportId" type="text" hidden>
+
+													</div>
+
+
+													<div class="form-group col-4">
+														<label for="AppOperations_Tractor">{{l("Tractor")}} <span
+																style="color: red;">*</span></label>
+														<input type="text" id="AppOperations_Tractor"
+															class="form-control" [(ngModel)]="appOperations.tractor"
+															name="AppOperations_Tractor" minlength="0" maxlength="255"
+															required />
+													</div>
+													<div class="form-group col-4">
+														<label for="AppOperations_Semi">{{l("Semi")}} <span
+																style="color: red;">*</span></label>
+														<input type="text" id="AppOperations_Semi" class="form-control"
+															[(ngModel)]="appOperations.semi" name="AppOperations_Semi"
+															minlength="0" maxlength="255" required />
+													</div>
+
+													<!--begin::Input-->
+													<div class="form-group m-form__group col-4">
+														<label
+															for="appOperations_securityOriginLocationId">{{l("lblOriginLocations")}}
+														</label>
+														<select name="appOperations_securityOriginLocationId"
+															[(ngModel)]="appOperations.securityOriginLocationId"
+															class="form-control">
+															<option selected value="undefined"></option>
+															<option *ngFor="let item of allAppLocationss"
+																value="{{item.id}}">{{item.displayName}}</option>
+														</select>
+													</div>
+													<div class="form-group col-8">
+														<label
+															for="AppOperations_securityOriginAddress">{{l("OriginAddress")}}</label>
+														<input type="text" id="AppOperations_securityOriginAddress"
+															class="form-control"
+															[(ngModel)]="appOperations.securityOriginAddress"
+															name="AppOperations_securityOriginAddress" minlength="0"
+															maxlength="255" />
+													</div>
+													<!--end::Input-->
+
+													<!--begin::Input-->
+													<div class="form-group m-form__group col-4">
+														<label
+															for="appOperations_securityDestinyLocationId">{{l("lblDestinationLocations")}}
+														</label>
+														<select name="appOperations_securityDestinyLocationId"
+															[(ngModel)]="appOperations.securityDestinyLocationId"
+															class="form-control">
+															<option selected value="undefined"></option>
+															<option *ngFor="let item of allAppLocationss"
+																value="{{item.id}}">{{item.displayName}}</option>
+														</select>
+													</div>
+													<div class="form-group col-8">
+														<label
+															for="AppOperations_securityDestinyAddress">{{l("DestinyAddress")}}</label>
+														<input type="text" id="AppOperations_securityDestinyAddress"
+															class="form-control"
+															[(ngModel)]="appOperations.securityDestinyAddress"
+															name="AppOperations_securityDestinyAddress" minlength="0"
+															maxlength="255" />
+													</div>
+
+
+													<div class="form-group col-4">
+														<label
+															for="AppOperations_DriverName">{{l("DriverName")}}</label>
+														<input type="text" id="AppOperations_DriverName"
+															class="form-control" [(ngModel)]="appOperations.driverName"
+															name="DriverName" minlength="0" maxlength="120" />
+													</div>
+													<div class="form-group col-4">
+														<label for="AppOperations_DriverDni">{{l("DriverDni")}} <span
+																style="color: red;">*</span></label>
+														<input required type="text" id="AppOperations_DriverDni"
+															class="form-control" [(ngModel)]="appOperations.driverDni"
+															name="AppOperations_DriverDni" minlength="0"
+															maxlength="255" />
+													</div>
+													<div class="form-group col-4">
+														<label
+															for="AppOperations_DriverCell">{{l("DriverCell")}}</label>
+														<input type="text" id="AppOperations_DriverCell"
+															class="form-control" [(ngModel)]="appOperations.driverCell"
+															name="DriverCell" minlength="0" maxlength="12" />
+													</div>
+
+													<!--end::Input-->
+
+													<div class="form-group col-5">
+														<label
+															for="AppOperations_SecurityInsuredAmountARS">{{l("SecurityInsuredAmountARS")}}</label>
+														<input type="number" id="AppOperations_SecurityInsuredAmountARS"
+															class="form-control"
+															[(ngModel)]="appOperations.securityInsuredAmountARS"
+															name="SecurityInsuredAmountARS"
+															(ngModelChange)='onSecurityInsuredAmountARSChange()' />
+													</div>
+													<div class="form-group col-2">
+														<label
+															for="AppOperations_ExchangeRate1">{{l("lblExchangeRate")}}</label>
+														<input type="number" id="AppOperations_ExchangeRate1"
+															class="form-control"
+															[(ngModel)]="appOperations.exchangeRate" name="ExchangeRate"
+															disabled />
+													</div>
+
+													<div class="form-group col-5">
+														<label
+															for="AppOperations_SecurityInsuredAmountUSD">{{l("SecurityInsuredAmountUSD")}}</label>
+														<input type="number" id="AppOperations_SecurityInsuredAmountUSD"
+															class="form-control"
+															[(ngModel)]="appOperations.securityInsuredAmountUSD"
+															name="SecurityInsuredAmountUSD"
+															(ngModelChange)='onsecurityInsuredAmountUSDChnage()' />
+													</div>
+
+													<fieldset class="scheduler-border" style="width: 100%;">
+														<legend class="scheduler-border">{{l('SelectionofServiceType')}}
+														</legend>
+														<div class="form-row" style="margin-top:5px">
+															<div class="form-group  col-3 ">
+																<label class="kt-checkbox control-label">
+																	<input type="checkbox" name="mppService"
+																		[(ngModel)]="appOperations.mppService"
+																		(ngModelChange)="mppServiceChange()"> MPP
+																</label>
+															</div>
+															<div class="form-group  col-3 ">
+																<label class="kt-checkbox control-label">
+																	<input type="checkbox" name="custodyService"
+																		[(ngModel)]="appOperations.custodyService"
+																		(ngModelChange)="CustodiaServiceChange()">
+																	Custodia
+																</label>
+
+
+															</div>
+															<div class="form-group  col-3 ">
+																<label class="kt-checkbox control-label">
+																	<input type="checkbox" name="auditService"
+																		[(ngModel)]="appOperations.auditService"
+																		(ngModelChange)="auditServiceChange()">
+																	Auditoria
+																</label>
+
+															</div>
+														</div>
+
+													</fieldset>
+													<ng-template [ngIf]="appOperations.mppService===true">
+														<fieldset class="scheduler-border" style="width: 100%;">
+															<legend class="scheduler-border">MPP
+															</legend>
+															<div class="form-row">
+																<div class="form-group m-form__group col-12">
+																	<label for="AppProvidersForMPP">Proveedor</label>
+																	<select name="AppProvidersForMPP"
+																		[(ngModel)]="appOperations.mppProviderId"
+																		class="form-control">
+																		<option disabled selected value="undefined">
+																		</option>
+																		<option *ngFor="let item of allMppProviderList"
+																			value="{{item.id}}">{{item.displayName}}
+																		</option>
+																	</select>
+																</div>
+
+																<div class="form-group m-form__group col-12"
+																	style="margin-top: 25px; margin-bottom: 25px !important;">
+																	<div class="checkbox-inline">
+																		<label attr.for="Reason_{{reason.id}}"
+																			class="checkbox"
+																			*ngFor="let reason of allOperationsMppReasons">
+																			<input id="Reason_{{reason.id}}"
+																				type="checkbox"
+																				name="Reason_{{reason.id}}"
+																				[(ngModel)]="reason.isSelected">
+																			<span></span>
+																			{{reason.name}}
+																		</label>
+																	</div>
+																</div>
+
+
+																<div class="form-group  m-form__group col-9">
+																	<label style="color: red;">
+																		Debe seleccionar al menos una opcion
+																	</label>
+																</div>
+
+																<div class="form-group  m-form__group col-3">
+																	<label
+																		for="AppOperations_MppSubtotal_price">{{l("MppSubtotal_price")}}</label>
+																	<input type="number"
+																		id="AppOperations_MppSubtotal_price"
+																		class="form-control"
+																		[(ngModel)]="appOperations.mppSubtotal_price"
+																		name="MppSubtotal_price" disabled />
+																</div>
+															</div>
+
+														</fieldset>
+													</ng-template>
+
+													<ng-template [ngIf]="appOperations.custodyService===true">
+														<fieldset class="scheduler-border" style="width: 100%;">
+															<legend class="scheduler-border">Custodia
+															</legend>
+
+															<div class="form-row">
+																<div class="form-group m-form__group col-12">
+																	<label
+																		for="AppProvidersForCustodia">Proveedor</label>
+																	<select name="AppProvidersForCustodia"
+																		[(ngModel)]="appOperations.custodyProviderId"
+																		class="form-control">
+																		<option selected value="undefined">
+																		</option>
+																		<option
+																			*ngFor="let item of allCustodyProviderList"
+																			value="{{item.id}}">{{item.displayName}}
+																		</option>
+																	</select>
+																</div>
+
+
+																<div class="form-group m-form__group col-12"
+																	style="margin-top: 25px; margin-bottom: 25px !important;">
+																	<div class="checkbox-inline">
+																		<label attr.for="CustodReason_{{reason.id}}"
+																			class="checkbox"
+																			*ngFor="let reason of allOperationsCustodiaReasons">
+																			<input id="CustodReason_{{reason.id}}"
+																				type="checkbox"
+																				name="CustodReason_{{reason.id}}"
+																				[(ngModel)]="reason.isSelected">
+																			<span></span>
+																			{{reason.name}}
+																		</label>
+																	</div>
+																</div>
+
+																<div class="form-group  m-form__group col-9">
+																	<label style="color: red;">
+																		Debe seleccionar al menos una opcion
+																	</label>
+																</div>
+
+																<div class="form-group  m-form__group col-4">
+																	<label
+																		for="AppOperations_KmQuantity">{{l("KmQuantity")}}</label>
+																	<input type="number" id="AppOperations_KmQuantity"
+																		class="form-control"
+																		[(ngModel)]="appOperations.kmQuantity"
+																		(ngModelChange)="PricePerKmCalculation()"
+																		name="KmQuantity" />
+																</div>
+																<div class="form-group  m-form__group col-4">
+
+																</div>
+																<div class="form-group  m-form__group col-4">
+																	<label style="margin-top: 25px;">{{l("PricePerKm")}}
+																		{{appOperations.pricePerKm}}</label>
+																	<!-- <input type="number" id="AppOperations_PricePerKm"
+																		class="form-control"
+																		[(ngModel)]="appOperations.pricePerKm"
+																		name="PricePerKm" disabled /> -->
+																</div>
+
+																<div class="form-group  m-form__group col-4">
+																	<label
+																		for="AppOperations_ExtraHours">{{l("ExtraHours")}}</label>
+																	<input type="number" id="AppOperations_ExtraHours"
+																		class="form-control"
+																		[(ngModel)]="appOperations.extraHours"
+																		(ngModelChange)="PricePerExtraHourCalculation()"
+																		name="ExtraHours" />
+																</div>
+																<div class="form-group  m-form__group col-4"></div>
+																<div class="form-group  m-form__group col-4">
+																	<label style="margin-top: 25px;"
+																		for="AppOperations_PricePerExtraHour">{{l("PricePerExtraHour")}}
+																		{{appOperations.pricePerExtraHour}}</label>
+																	<!-- <input type="number"
+																		id="AppOperations_PricePerExtraHour"
+																		class="form-control"
+																		[(ngModel)]="appOperations.pricePerExtraHour"
+																		name="PricePerExtraHour" disabled /> -->
+																</div>
+
+																<div class="form-group col-4">
+																	<label
+																		for="AppOperations_TollPrice">{{l("TollPrice")}}</label>
+																	<input type="number" id="AppOperations_TollPrice"
+																		class="form-control"
+																		[(ngModel)]="appOperations.tollPrice"
+																		name="TollPrice"
+																		(ngModelChange)="calculateCustodySubTotal()" />
+																</div>
+																<div class="form-group  m-form__group col-8"></div>
+
+
+																<div class="form-group  m-form__group col-9"></div>
+																<div class="form-group col-3">
+																	<label
+																		for="AppOperations_CustodySubtotal">{{l("CustodySubtotal")}}</label>
+																	<input type="number"
+																		id="AppOperations_CustodySubtotal"
+																		class="form-control"
+																		[(ngModel)]="appOperations.custodySubtotal"
+																		name="CustodySubtotal" disabled />
+																</div>
+
+															</div>
+
+														</fieldset>
+													</ng-template>
+
+
+													<ng-template [ngIf]="appOperations.auditService===true">
+														<fieldset class="scheduler-border" style="width: 100%;">
+															<legend class="scheduler-border">Auditoría
+															</legend>
+
+															<div class="form-row">
+																<div class="form-group m-form__group col-12">
+																	<label
+																		for="AppProvidersForAuditoría">Proveedor</label>
+																	<select name="AppProvidersForAuditoría"
+																		[(ngModel)]="appOperations.auditProviderId"
+																		class="form-control">
+																		<option selected value="undefined">
+																		</option>
+																		<option
+																			*ngFor="let item of allAuditoriaProviderList"
+																			value="{{item.id}}">{{item.displayName}}
+																		</option>
+																	</select>
+																</div>
+
+																<div class="form-group  m-form__group col-9"></div>
+																<div class="form-group col-3">
+																	<label
+																		for="AppOperations_AuditSubtotal">{{l("AuditSubtotal")}}</label>
+																	<input type="number"
+																		id="AppOperations_AuditSubtotal"
+																		class="form-control"
+																		[(ngModel)]="appOperations.auditSubtotal"
+																		name="AuditSubtotal" disabled />
+																</div>
+
+															</div>
+
+														</fieldset>
+													</ng-template>
+
+
+
+
+												</div>
+
+											</div>
+											<!--end: Wizard Step 3-->
+											<!--begin: Wizard Step 4-->
+											<div class="pb-5" data-wizard-type="step-content">
+												<h4 class="mb-10 font-weight-bold text-dark">
+													Edición de Operación</h4>
+												<div class="form-row">
+													<fieldset class="scheduler-border" style="width: 100%;">
+														<legend class="scheduler-border">Subtotales
+														</legend>
+														<div class="form-row">
+															<div class="form-group col-6">
+																<label
+																	for="AppOperations_InsuranceSubtotalCost">{{l("InsuranceSubtotalCost")}}
+																	$ {{appOperations.insuranceSubtotalCost}}</label>
+																<!-- <input type="number" id="AppOperations_InsuranceSubtotalCost" class="form-control" [(ngModel)]="appOperations.insuranceSubtotalCost" name="InsuranceSubtotalCost"  /> -->
+															</div>
+															<div class="form-group col-6">
+																<label
+																	for="AppOperations_SubtotalInsuranceBilling">{{l("securitySubTotal")}}
+																	$ {{securitySubTotal }}</label>
+																<!-- <input type="number" id="AppOperations_SubtotalInsuranceBilling" class="form-control" [(ngModel)]="appOperations.subtotalInsuranceBilling" name="SubtotalInsuranceBilling"  /> -->
+															</div>
+														</div>
+
+													</fieldset>
+
+													<fieldset class="scheduler-border" style="width: 100%;">
+														<legend class="scheduler-border">Total Operación
+														</legend>
+														<div class="form-row">
+															<div class="form-group col-6">
+																<label
+																	for="AppOperations_OperationTotalARS">{{l("OperationTotalARS")}}
+																	$ {{appOperations.operationTotalARS }} </label>
+																<!-- <input type="number" id="AppOperations_OperationTotalARS" class="form-control" [(ngModel)]="appOperations.operationTotalARS" name="OperationTotalARS"  /> -->
+															</div>
+															<div class="form-group col-6">
+																<label
+																	for="AppOperations_OperationTotalUSD">{{l("OperationTotalUSD")}}
+																	$ {{appOperations.operationTotalUSD }}</label>
+																<!-- <input type="number" id="AppOperations_OperationTotalUSD" class="form-control" [(ngModel)]="appOperations.operationTotalUSD" name="OperationTotalUSD"  /> -->
+															</div>
+
+
+
+														</div>
+
+													</fieldset>
+
+												</div>
+
+											</div>
+											<!--end: Wizard Step 4-->
+											<!--begin: Wizard Actions-->
+											<div class="d-flex justify-content-between border-top mt-5 pt-10">
+												<div class="mr-2">
+													<button type="button"
+														class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4"
+														data-wizard-type="action-prev">{{l("btnWizardPrevious")}}</button>
+												</div>
+												<div>
+													<button type="submit"
+														class="btn btn-success font-weight-bolder text-uppercase px-9 py-4"
+														data-wizard-type="action-submit">{{l("btnWizardSubmit")}}</button>
+													<button type="button"
+														class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4"
+														data-wizard-type="action-next">{{l("btnWizardNext")}}</button>
+												</div>
+											</div>
+											<!--end: Wizard Actions-->
+											<div></div>
+											<div></div>
+											<div></div>
+											<div></div>
+											<div></div>
+											<div></div>
+											<div></div>
+											<div></div>
+										</form>
+										<!--end: Wizard Form-->
+									</div>
+								</div>
+								<!--end: Wizard Body-->
+							</div>
+							<!--end: Wizard-->
+						</div>
+					</div>
+				</div>
+				<!--end::Container-->
+			</div>
+			<!--end::Entry-->
+		</div>
+		<!--end::Content-->
+	</div>
+
+
+
+	<appOperationsAppCustomersLookupTableModal #appOperationsAppCustomersLookupTableModal
+		(modalSave)="getNewBillingCustomerId()"></appOperationsAppCustomersLookupTableModal>
+	<appOperationsAppCustomersLookupTableModal #appOperationsAppCustomersLookupTableModal2
+		(modalSave)="getNewCustomerId()"></appOperationsAppCustomersLookupTableModal>
+
+	<!-- <appOperationsAppProvidersLookupTableModal #appOperationsAppProvidersLookupTableModal
+		(modalSave)="getNewAuditProviderId()"></appOperationsAppProvidersLookupTableModal>
+	<appOperationsAppProvidersLookupTableModal #appOperationsAppProvidersLookupTableModal2
+		(modalSave)="getNewCustodyProviderId()"></appOperationsAppProvidersLookupTableModal>
+	<appOperationsAppProvidersLookupTableModal #appOperationsAppProvidersLookupTableModal3
+		(modalSave)="getNewMppProviderId()"></appOperationsAppProvidersLookupTableModal> -->
+	<!-- <appOperationsAppPoliciesLookupTableModal #appOperationsAppPoliciesLookupTableModal (modalSave)="getNewPolicyId()">
+	</appOperationsAppPoliciesLookupTableModal> -->
+
+	<appCustomersPolicyLookupTableModel #appCustomersPolicyLookupTableModel (modalSave)="getNewClientPolicy()">
+	</appCustomersPolicyLookupTableModel>
+
+	<appTransportsLookupTableModel #appTransportsLookupTableModel (modalSave)="getTransportId()">
+	</appTransportsLookupTableModel>
+
+
+</div>

@@ -1,0 +1,48 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span>{{ l("Vincular") }}</span>
+                </h4>
+                <button type="button" class="close" (click)="close()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="card card-custom gutter-b">
+                <div class="card-body">
+                    <form class="form" autocomplete="off">
+
+                        <div class="form-group">
+                            <label for="VoucherNumber">{{l("VoucherNumber")}}</label>
+                            <input type="number" id="VoucherNumber" class="form-control"
+                                [(ngModel)]="VoucherNumber" name="VoucherNumber" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="VoucherPrefix">{{l("VoucherPrefix")}}</label>
+                            <p-inputMask id="VoucherPrefix" [(ngModel)]="VoucherPrefix" name="VoucherPrefix" mask="9999" placeholder="9999" styleClass="form-control"></p-inputMask>
+                        </div>
+
+                    </form>
+
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button [disabled]="saving" type="button" class="btn btn-danger red" (click)="close()">{{ l("Close") }}</button>
+                <button [disabled]="saving" type="button" class="btn btn-info green" (click)="Clear()">{{ l("Clear") }}</button>
+                <button [disabled]="saving" type="button" class="btn btn-primary blue" (click)="setAndSave()">{{ l("Set") }}</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+﻿<div bsModal #generateCertificateModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+	aria-labelledby="generateCertificateModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<!-- <form *ngIf="active" #fileUploadForm="ngForm" enctype="multipart/form-data" novalidate autocomplete="off"> -->
+			<div class="modal-header">
+				<!-- <h4 class="modal-title">
+					{{l("GenerateCertificateIndex")}}
+				</h4> -->
+				<button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<button [disabled]="saving" type="button" class="btn btn-danger"
+					(click)="close()">{{l("Cancel")}}</button>
+				<button type="button" class="btn btn-primary blue" [buttonBusy]="saving"
+					[busyText]="l('SavingWithThreeDot')" (click)="downlaodPdf()">
+					<i class="fa fa-arrow-circle-down"></i>
+					<span>{{l("DownloadPDF")}}</span></button>
+				<button type="button" class="btn btn-primary blue" [buttonBusy]="saving"
+					[busyText]="l('SavingWithThreeDot')" (click)="downlaodDocx()">
+					<i class="fa fa-arrow-circle-down"></i>
+					<span>{{l("DownloadDOC")}}</span></button>
+				<button type="button" class="btn btn-info blue" [buttonBusy]="saving"
+					[busyText]="l('SavingWithThreeDot')" (click)="SendCertificateByEmail()">
+					<i class="fa fa-envelope-square"></i>
+					<span>{{l("SendCertificateByEmail")}}</span></button>
+
+			</div>
+			<div class="modal-body">
+
+				<!-- <div class="form-group">
+					<label for="TomadorParamiter">TOMADOR</label>
+					<input type="text" id="TomadorParamiter" class="form-control" [(ngModel)]="TomadorParamiter"
+						name="TomadorParamiter" minlength="0" maxlength="80" />
+				</div> -->
+
+
+				<div id="FullReport">
+					<div id="pdfReportContent" class="ReportContent">
+						<div class="container-fluid" style="font-family: Arial, Helvetica, sans-serif;">
+
+							<div class="row">
+								<div class="col-12" style="text-align: right;">
+									<img id="logo" [src]="providerLogoImage" class="img-thumbnail" width="120"
+										height="80">
+								</div>
+							</div>
+							<quill-view-html [content]="data.providerCertificateTemplate"></quill-view-html>
+							<div class="row" style="margin-top: 20px;">
+								<div class="col-12" style="text-align: right;">
+									<img [src]="providerSignatureImage" class="img-thumbnail" width="120" height="80">
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="modal-footer">
+
+				<button [disabled]="saving" type="button" class="btn btn-danger"
+					(click)="close()">{{l("Cancel")}}</button>
+				<button type="button" class="btn btn-primary blue" [buttonBusy]="saving"
+					[busyText]="l('SavingWithThreeDot')" (click)="downlaodPdf()">
+					<i class="fa fa-arrow-circle-down"></i>
+					<span>{{l("DownloadPDF")}}</span></button>
+				<button type="button" class="btn btn-primary blue" [buttonBusy]="saving"
+					[busyText]="l('SavingWithThreeDot')" (click)="downlaodDocx()">
+					<i class="fa fa-arrow-circle-down"></i>
+					<span>{{l("DownloadDOC")}}</span></button>
+
+			</div>
+
+		</div>
+	</div>
+</div>

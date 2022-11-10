@@ -1,0 +1,52 @@
+<form #appCustomersPriceForm="ngForm" novalidate (ngSubmit)="wizerdContinue()" autocomplete="off">
+    <div class="form-row">
+        <div class="zeromarginbuttom form-group col-12" >
+            <label>{{l("lblDefineAuditPrice")}}</label>
+        </div>
+        <!-- Precios Section -->
+        <div class="form-group col-6">
+            <!-- <label for="AppCustomers_AuditPrice">{{l("AuditPrice")}}</label> -->
+            <input type="number" id="AppCustomers_AuditPrice" class="form-control"
+                [(ngModel)]="appCustomers.auditPrice" name="AuditPrice" required placeholder="{{l('AuditPrice')}} *" />
+        </div>
+        <div class="form-group col-6">
+            <!-- <label for="AppCustomers_MppPrice">{{l("MppPrice")}}</label> -->
+            <input type="number" id="AppCustomers_MppPrice" class="form-control"
+                [(ngModel)]="appCustomers.mppPrice" name="MppPrice"  required placeholder="{{l('MppPrice')}} *" />
+        </div>
+
+        <div class="zeromarginbuttom form-group col-12" >
+            <label>{{l("lblDefineKitomiterPrice")}}</label>
+        </div>
+
+        <div class="form-group  col-4">
+            <!-- <label for="AppCustomers_BasicModule">{{l("BasicModule")}}</label> -->
+            <input type="number" id="AppCustomers_BasicModule" class="form-control"
+                [(ngModel)]="appCustomers.basicModule" name="BasicModule" required placeholder="{{l('BasicModule')}} *" />
+        </div>
+
+        <div class="form-group  col-4">
+            <!-- <label for="AppCustomers_PricePerKm">{{l("PricePerKm")}}</label> -->
+            <input type="number" id="AppCustomers_PricePerKm" class="form-control"
+                [(ngModel)]="appCustomers.pricePerKm" name="PricePerKm" required placeholder="{{l('PricePerKm')}} *" />
+        </div>
+
+        <div class="form-group  col-4">
+            <!-- <label for="AppCustomers_PricePerExtraHour">{{l("PricePerExtraHour")}}</label> -->
+            <input type="number" id="AppCustomers_PricePerExtraHour" class="form-control"
+                [(ngModel)]="appCustomers.pricePerExtraHour" name="PricePerExtraHour" required placeholder="{{l('PricePerExtraHour')}} *" />
+        </div>
+      
+       
+
+    </div>
+    <div class="footer pull-right">
+            <button [disabled]="saving" type="button" class="btn btn-warning" (click)="close()">{{l("Cancel")}}</button>
+            <button [disabled]="saving" type="button" class="btn btn-danger" (click)="returnPreviousTab()">{{l("btnReturnPrevious")}}</button>
+            <button type="submit" class="btn btn-primary blue"  [disabled]="!appCustomersPriceForm.form.valid"
+                [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                <span>{{l("btnContinueNext")}}</span></button>
+    </div>
+
+   
+</form>

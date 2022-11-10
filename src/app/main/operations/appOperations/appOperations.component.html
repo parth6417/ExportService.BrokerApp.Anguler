@@ -1,0 +1,393 @@
+<div [@routerTransition]>
+    <div class="content d-flex flex-column flex-column-fluid">
+        <sub-header [title]="'AppOperations' | localize" [description]="'AppOperationsHeaderInfo' | localize">
+            <div role="actions">
+                <div class="btn-group" dropdown>
+                    <button dropdownToggle type="button" class="btn btn-outline-success dropdown-toggle mr-1"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="far fa-file-excel"></i> {{"ExcelOperations" | localize}}
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-excel-operations" *dropdownMenu>
+                        <a class="dropdown-item" id="ExportUsersToExcelButton" (click)="exportToExcel()"
+                           href="javascript:;">
+                            <i class="fa fa-download mr-2 mt-1" style="font-size: 1rem;"></i>
+                            {{'ExportToExcel' | localize}}
+                        </a>
+                        <a href="javascript:;" *ngIf="'Pages.AppOperations.Create' | permission" class="no-padding">
+                            <span class="fileinput-button">
+                                <p-fileUpload customUpload="true" name="ExcelFileUpload" #ExcelFileUpload
+                                              maxFileSize="10000000" auto="auto" accept=".csv,.xls,.xlsx"
+                                              (uploadHandler)="uploadExcel($event)" (onError)="onUploadExcelError()"
+                                              chooseLabel="{{'ImportFromExcel' | localize}}">
+                                </p-fileUpload>
+                            </span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <span class="dropdown-item-text text-muted pl-3" href="#">
+                            <small [innerHTML]="l('ImportToExcelSampleFileDownloadInfo', '<a href=/assets/sampleFiles/ImportOperationSampleFile.xlsx>' + l('ClickHere') + '</a>')"></small>
+                        </span>
+                    </div>
+                </div>
+                <button *ngIf="isGranted('Pages.AppOperations.Create') && !securityService" (click)="createAppOperations()"
+                        class="btn btn-sm btn-primary blue">
+                    <i class="fa fa-plus"></i> {{l("CreateNewAppOperations")}}
+                </button>
+                <button *ngIf="isGranted('Pages.AppOperations.WithSequrity') && securityService" (click)="createAppOperationsWithSequrity()"
+                        class="btn btn-sm btn-primary blue">
+                    <i class="fa fa-plus"></i> {{l("AppOperationsWithSequrity")}}
+                </button>
+            </div>
+        </sub-header>
+        <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div class="kt-portlet__body">
+                    <form class="kt-form" autocomplete="off">
+                        <div>
+                            <div class="row align-items-center">
+                                <div class="col-xl-12">
+                                    <div class="form-group m-form__group align-items-center">
+                                        <div class="input-group">
+                                            <input [(ngModel)]="filterText" name="filterText" autoFocus
+                                                   class="form-control m-input" [placeholder]="l('SearchWithThreeDot')"
+                                                   type="text">
+                                            <span class="input-group-btn">
+                                                <button (click)="getAppOperations()" class="btn btn-primary"
+                                                        type="submit">
+                                                    <i class="flaticon-search-1"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" [hidden]="!advancedFiltersAreShown">
+                                <div class="col-md-12">
+                                    <div class="kt-separator kt-separator--border-dashed"></div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="MinOperationDateFilter">{{l("OperationDateRange")}}</label>
+                                        <div class="input-group">
+                                            <input class="form-control m-input" id="MinOperationDateFilter"
+                                                   name="MinOperationDateFilter" type="datetime" bsDatepicker
+                                                   placeholder="{{l('MinValue')}}" [(ngModel)]="minOperationDateFilter">
+                                            <span style="line-height: 40px;padding: 0 15px 0 15px;"> &mdash; </span>
+                                            <input class="form-control m-input" id="MaxOperationDateFilter"
+                                                   name="MaxOperationDateFilter" type="datetime" bsDatepicker
+                                                   placeholder="{{l('MaxValue')}}" [(ngModel)]="maxOperationDateFilter">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="ddlOperationType">
+                                            {{l("OperationType")}}
+                                        </label>
+
+                                        <select name="ddlOperationType" id="ddlOperationType" [(ngModel)]="operationType"
+                                                class="form-control">
+                                            <option selected value=''></option>
+                                            <option value="InsuranceService">{{l("OperationTypeInsurance")}}</option>
+                                            <option value="SecurityService">{{l("OperationTypeSecurity")}}</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="AppPoliciesPolicyNameFilter">
+                                            ({{l("AppPolicies")}})
+                                            {{l("PolicyName")}}
+                                        </label>
+                                        <input type="text" class="form-control" id="AppPoliciesPolicyNameFilter"
+                                               name="appPoliciesPolicyNameFilter"
+                                               [(ngModel)]="appPoliciesPolicyNameFilter">
+                                    </div>
+                                </div>
+                                <div *ngIf="securityService" class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="AppPoliciesPolicyNameFilter">
+                                            {{l("Estado")}}
+                                        </label>
+                                        <div class="input-group">
+                                            <input [(ngModel)]="estadoText" name="estadoText"
+                                                   class="form-control m-input" placeholder="Estado"
+                                                   type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-sm-12">
+                                    <span class="clickable-item text-muted" *ngIf="!advancedFiltersAreShown"
+                                          (click)="advancedFiltersAreShown=!advancedFiltersAreShown">
+                                        <i class="fa fa-angle-down"></i> {{l("ShowAdvancedFilters")}}
+                                    </span>
+                                    <span class="clickable-item text-muted" *ngIf="advancedFiltersAreShown"
+                                          (click)="advancedFiltersAreShown=!advancedFiltersAreShown">
+                                        <i class="fa fa-angle-up"></i> {{l("HideAdvancedFilters")}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row align-items-center">
+                        <!--<Primeng-Datatable-Start>-->
+                        <div class="primeng-datatable-container col-12" [busyIf]="primengTableHelper.isLoading">
+                            <p-table #dataTable (onLazyLoad)="getAppOperations($event)"
+                                     [value]="primengTableHelper.records"
+                                     rows="{{primengTableHelper.defaultRecordsCountPerPage}}" [paginator]="false"
+                                     [lazy]="true" [scrollable]="true" ScrollWidth="100%"
+                                     [responsive]="primengTableHelper.isResponsive"
+                                     [resizableColumns]="primengTableHelper.resizableColumns">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="width: 130px"
+                                            [hidden]="!isGrantedAny('Pages.AppOperations.Edit', 'Pages.AppOperations.Delete')">
+                                            {{l('Actions')}}
+                                        </th>
+
+                                        <th style="width: 130px" pSortableColumn="OperationID">
+                                            {{l('OperationID')}}
+                                            <p-sortIcon field="appOperations.id"></p-sortIcon>
+                                        </th>
+
+                                        <th style="width: 80px" pSortableColumn="operationDate">
+                                            {{l('OperationDate')}}
+                                            <p-sortIcon field="appOperations.operationDate"></p-sortIcon>
+                                        </th>
+
+                                        <th style="width: 110px" pSortableColumn="certificateNumber">
+                                            {{l('CertificateNumber')}}
+                                            <p-sortIcon field="appOperations.certificateNumber"></p-sortIcon>
+                                        </th>
+
+                                        <th style="width: 170px" pSortableColumn="operationNumber">
+                                            {{l('OperationReference')}}
+                                            <p-sortIcon field="appOperations.operationNumber"></p-sortIcon>
+                                        </th>
+
+                                        <th style="width: 150px" pSortableColumn="customerFk.businessName">
+                                            {{l('Company')}}
+                                            <p-sortIcon field="appCustomersBusinessName"></p-sortIcon>
+                                        </th>
+
+                                        <th style="width: 170px" pSortableColumn="insuredAmountUSD">
+                                            {{l('InsuredAmountUSD')}}
+                                            <p-sortIcon field="appOperations.insuredAmountUSD"></p-sortIcon>
+                                        </th>
+
+                                        <th style="width: 150px" pSortableColumn="commodityTypeFk.name">
+                                            {{l('lblCommoditesTypes')}}
+                                            <p-sortIcon field="appCommoditesTypesName"></p-sortIcon>
+                                        </th>
+
+                                        <th style="width: 175px" pSortableColumn="OperationTotalUSD">
+                                            {{l('OperationTotalUSD')}}
+                                            <p-sortIcon field="operationTotalUSD"></p-sortIcon>
+                                        </th>
+
+                                        <th style="width: 150px" pSortableColumn="PDF">
+                                            {{l('InvoiceFinal')}}
+                                        </th>
+
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-record="$implicit">
+                                    <tr>
+                                        <td style="width: 130px"
+                                            [hidden]="!isGrantedAny('Pages.AppOperations.Edit', 'Pages.AppOperations.Delete')">
+                                            <div class="btn-group dropdown" dropdown container="body">
+                                                <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                                    <i class="fa fa-cog"></i><span class="caret"></span>
+                                                    {{l("Actions")}}
+                                                </button>
+                                                <ul class="dropdown-menu" *dropdownMenu>
+                                                    <!-- <li>
+                                                    <a href="javascript:;"
+                                                        (click)="viewAppOperationsModal.show(record)">{{l('View')}}</a>
+                                                </li> -->
+                                                    <li>
+                                                        <a class="dropdown-item" href="javascript:;"
+                                                           *ngIf="permission.isGranted('Pages.AppOperations.Edit') && record.appOperations.insuranceService == true && record.appOperations.securityService == false"
+                                                           (click)="EditOperationWithInsurance(record.appOperations.id)">
+                                                            <span title="Edit">
+                                                                <i class="fa fa fa-edit" aria-hidden="true"
+                                                                   style="color: red;"></i> {{l('Edit')}}
+                                                            </span>
+
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a class="dropdown-item" href="javascript:;"
+                                                           *ngIf="permission.isGranted('Pages.AppOperations.WithSequrity') && record.appOperations.insuranceService == false  && record.appOperations.securityService == true"
+                                                           (click)="EditOperationWithSequrity(record.appOperations.id)">
+                                                            <span title="Edit">
+                                                                <i class="fa fa fa-edit" aria-hidden="true"
+                                                                   style="color: red;"></i> {{l('EditAppOperationsWithSequrity')}}
+                                                            </span>
+
+                                                        </a>
+                                                    </li>
+
+
+                                                    <li>
+                                                        <a class="dropdown-item" href="javascript:;"
+                                                           *ngIf="permission.isGranted('Pages.AppOperations.Edit')"
+                                                           (click)="createOrEditAppOperationsModal.show(record.appOperations.id,true)">
+                                                            <span title="DuplicateOperation">
+                                                                <i class="fa fa fa-clone" aria-hidden="true"
+                                                                   style="color: red;"></i> {{l('DuplicateOperation')}}
+                                                            </span>
+                                                        </a>
+                                                    </li>
+
+
+                                                    <li>
+                                                        <a class="dropdown-item" href="javascript:;"
+                                                           *ngIf="permission.isGranted('Pages.AppOperations.Edit')"
+                                                           (click)="generateCertificateAppOperationsModal.show(record.appOperations.id)">
+                                                            <span title="GenerateCertificate">
+                                                                <i class="fa fa fa-certificate" aria-hidden="true"
+                                                                   style="color: red;"></i>
+                                                                {{l('GenerateCertificate')}}
+                                                            </span>
+                                                        </a>
+                                                    </li>
+
+
+                                                    <li>
+                                                        <a class="dropdown-item" href="javascript:;"
+                                                           *ngIf="permission.isGranted('Pages.AppOperations.Edit')"
+                                                           (click)="fileUploadAppOperationsModal.show(record.appOperations.id)">
+                                                            <span title="OperationAttachment">
+                                                                <i class="fa fa-paperclip" aria-hidden="true"
+                                                                   style="color: red;"></i>
+                                                                {{l('OperationAttachment')}}
+                                                            </span>
+                                                        </a>
+                                                    </li>
+
+                                                    <li *ngIf="permission.isGranted('Pages.AppOperations.Edit')">
+                                                        <a class="dropdown-item" href="javascript:;"
+                                                           (click)="auditAppOperationsModal.show(record.appOperations.id)">
+                                                            <span title="Auditoría">
+                                                                <i class="fa fa-history" aria-hidden="true"
+                                                                   style="color: red;"></i>
+                                                                Auditoría
+                                                            </span>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a class="dropdown-item" href="javascript:;"
+                                                           *ngIf="permission.isGranted('Pages.AppOperations.Delete')"
+                                                           (click)="deleteAppOperations(record.appOperations)">
+                                                            <span title="Delete">
+                                                                <i class="fa fa fa-trash" aria-hidden="true"
+                                                                   style="color: red;"></i> {{l('Delete')}}
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="javascript:;" [routerLink]="['/app/main/operations/true']"
+                                                        (click)="createAppOperationsWithSequrity()">
+                                                            <span title="Security">
+                                                                <i class="fa fa fa-angle-up" aria-hidden="true"
+                                                                   style="color: red;"></i> Create Security 
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+
+                                        <td style="width:130px">
+                                            <span *ngIf="record.appOperations.id">
+                                                {{record.appOperations.id}}
+                                            </span>
+                                            <span *ngIf="!record.appOperations.id">-</span>
+                                        </td>
+
+                                        <td style="width:80px">
+                                            <span *ngIf="record.appOperations.operationDate">
+                                                {{record.appOperations.operationDate | date:'dd/MM/yyyy'}}
+                                            </span>
+                                            <span *ngIf="!record.appOperations.operationDate">-</span>
+                                        </td>
+
+                                        <td style="width:110px">
+                                            {{record.appOperations.certificateNumber}}
+                                        </td>
+
+                                        <td style="width:170px">
+                                            {{record.appOperations.operationNumber }}
+                                        </td>
+
+                                        <td style="width:150px">
+                                            {{record.clientBusinessName}}
+                                        </td>
+
+                                        <td style="width:170px">
+                                            {{record.appOperations.insuredAmountUSD | number: '.2'}}
+                                        </td>
+
+                                        <td style="width:150px">
+                                            {{record.appCommoditesTypesName}}
+                                        </td>
+
+                                        <td style="width:175px">
+                                            {{record.appOperations.operationTotalUSD | number: '.2'}}
+                                        </td>
+
+                                        <td style="width:150px">
+                                                <a href="javascript:;"
+                                                *ngIf="record.voucherPDF"
+                                                (click)="openLink(record.voucherPDF)">
+                                                 <span title="Download">
+                                                     <i class="fa fa-file-pdf " aria-hidden="true"
+                                                        style="color: rgb(184, 8, 8); font-size: 1rem;"></i>
+                                                 </span>
+                                             </a>
+                                        </td>
+
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                            <div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                                {{l('NoData')}}
+                            </div>
+                            <div class="primeng-paging-container">
+                                <p-paginator [rows]="primengTableHelper.defaultRecordsCountPerPage" #paginator
+                                             (onPageChange)="getAppOperations($event)"
+                                             [totalRecords]="primengTableHelper.totalRecordsCount"
+                                             [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
+                                </p-paginator>
+                                <span class="total-records-count">
+                                    {{l('TotalRecordsCount', primengTableHelper.totalRecordsCount)}}
+                                </span>
+                            </div>
+                        </div>
+                        <!--<Primeng-Datatable-End>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <createOrEditAppOperationsModal #createOrEditAppOperationsModal (modalSave)="getAppOperations()">
+        </createOrEditAppOperationsModal>
+
+        <fileUploadAppOperationsModal #fileUploadAppOperationsModal></fileUploadAppOperationsModal>
+
+        <generateCertificateAppOperationsModal #generateCertificateAppOperationsModal>
+        </generateCertificateAppOperationsModal>
+
+        <auditAppOperationsModal #auditAppOperationsModal></auditAppOperationsModal>
+
+
+
+        <!-- <viewAppOperationsModal #viewAppOperationsModal></viewAppOperationsModal> -->
+
+    </div>
+</div>

@@ -1,0 +1,25 @@
+{
+    "typescript.check.workspaceVersion": false,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.DS_Store": true,
+        "node_modules": true,
+        "bin": true,
+        "obj": true,
+        "dist": true,
+        "Properties": true,
+        ".vs": true,
+        "*.csproj": true,
+        "*.sln": true,
+        "*.csproj.user": true,
+        "*.suo": true
+    },
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/3106391b-e9db-4295-a8ab-82596fbf8a0f/resourceGroups/app-exportservice_group/providers/Microsoft.Web/sites/app-exportservice",
+    "appService.deploySubpath": "dist"
+}

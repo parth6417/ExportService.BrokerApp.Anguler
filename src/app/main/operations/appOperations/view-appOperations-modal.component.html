@@ -1,0 +1,99 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span>{{l("Details")}}</span>
+                </h4>
+                <button type="button" class="close" (click)="close()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <h6>{{l("CertificateNumber")}} :</h6>
+                        {{ item.appOperations.certificateNumber }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("OperationDate")}} :</h6>
+                        {{item.appOperations.operationDate  | amDateFormat:
+                            'DD/MM/YYYY'}}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("InsuredAmountUSD")}} :</h6>
+                        {{ item.appOperations.insuredAmountUSD }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("OperationNumber")}} :</h6>
+                        {{ item.appOperations.operationNumber }}
+                    </div>
+
+                    <div class="col-6 mb-3">
+                        <h6>({{l("AppPorts")}}) {{l("Name")}} :</h6>
+                        {{item.appPortsName}}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>({{l("AppProviders")}}) {{l("BusinessName")}} :</h6>
+                        {{item.appProvidersBusinessName}}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>({{l("AppCustomers")}}) {{l("BusinessName")}} :</h6>
+                        {{item.appCustomersBusinessName}}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>({{l("AppCustomers")}}) {{l("BusinessName")}} :</h6>
+                        {{item.appCustomersBusinessName2}}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>({{l("AppCommoditesTypes")}}) {{l("Name")}} :</h6>
+                        {{item.appCommoditesTypesName}}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>({{l("AppProviders")}}) {{l("BusinessName")}} :</h6>
+                        {{item.appProvidersBusinessName2}}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>({{l("AppLocations")}}) {{l("Name")}} :</h6>
+                        {{item.appLocationsName}}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>({{l("AppProviders")}}) {{l("BusinessName")}} :</h6>
+                        {{item.appProvidersBusinessName3}}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>({{l("AppLocations")}}) {{l("Name")}} :</h6>
+                        {{item.appLocationsName2}}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>({{l("AppPolicies")}}) {{l("PolicyName")}} :</h6>
+                        {{item.appPoliciesPolicyName}}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>({{l("AppLocations")}}) {{l("Name")}} :</h6>
+                        {{item.appLocationsName3}}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>({{l("AppLocations")}}) {{l("Name")}} :</h6>
+                        {{item.appLocationsName4}}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>({{l("AppTransports")}}) {{l("Name")}} :</h6>
+                        {{item.appTransportsName}}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>({{l("AppZones")}}) {{l("Name")}} :</h6>
+                        {{item.appZonesName}}
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button [disabled]="saving" type="button" class="btn btn-primary blue" (click)="close()">{{l("Close")}}</button>
+            </div>
+        </div>
+    </div>
+
+</div>

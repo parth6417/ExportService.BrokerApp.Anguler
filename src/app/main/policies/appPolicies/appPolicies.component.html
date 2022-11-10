@@ -1,0 +1,202 @@
+<div [@routerTransition]>
+    <div class="content d-flex flex-column flex-column-fluid">
+       
+
+        <sub-header [title]="'AppPolicies' | localize" [description]="'AppPoliciesHeaderInfo' | localize">
+            <div role="actions">
+                <button (click)="exportToExcel()" class="btn btn-sm btn-outline-success"><i class="fa fa-file-excel"></i> {{l("ExportToExcel")}}</button>
+                <button *ngIf="isGranted('Pages.AppPolicies.Create')" (click)="createAppPolicies()"
+                        class="btn btn-sm btn-primary blue">
+                    <i class="fa fa-plus"></i> {{l("CreateNewAppPolicies")}}
+                </button>
+            </div>
+        </sub-header>
+
+
+        <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div class="kt-portlet__body">
+                    <form class="kt-form" autocomplete="off">
+                        <div>
+                            <div class="row align-items-center">
+                                <div class="col-xl-12">
+                                    <div class="form-group m-form__group align-items-center">
+                                        <div class="input-group">
+                                            <input [(ngModel)]="filterText" name="filterText" autoFocus class="form-control m-input" [placeholder]="l('SearchWithThreeDot')" type="text">
+                                            <span class="input-group-btn">
+                                                <button (click)="getAppPolicies()" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" [hidden]="!advancedFiltersAreShown">
+                                <div class="col-md-12">
+                                    <div class="kt-separator kt-separator--border-dashed"></div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <!--<label for="AppProvidersBusinessNameFilter">({{l("AppProviders")}}) {{l("BusinessName")}}</label>-->
+                                        <input type="text" class="form-control" id="AppProvidersBusinessNameFilter" name="appProvidersBusinessNameFilter" [(ngModel)]="appProvidersBusinessNameFilter" placeholder="{{l('PoliciesBusinessName')}}">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <!--<label for="PolicyNumberFilter">{{l("PolicyNumber")}}</label>-->
+                                        <input type="text" class="form-control" id="PolicyNumberFilter" name="policyNumberFilter" [(ngModel)]="policyNumberFilter" placeholder="{{l('PolicyNumber')}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <!--<label for="PolicyNameFilter">{{l("PolicyName")}}</label>-->
+                                        <input type="text" class="form-control" id="PolicyNameFilter" name="policyNameFilter" [(ngModel)]="policyNameFilter" placeholder="{{l('PolicyName')}}">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <!--<label for="OperationTypeFilter">{{l("OperationType")}}</label>-->
+                                        <input type="text" class="form-control" id="OperationTypeFilter" name="operationTypeFilter" [(ngModel)]="operationTypeFilter" placeholder="{{l('OperationType')}}">
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-sm-12">
+                                    <span class="clickable-item text-muted" *ngIf="!advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown"><i class="fa fa-angle-down"></i> {{l("ShowAdvancedFilters")}}</span>
+                                    <span class="clickable-item text-muted" *ngIf="advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown"><i class="fa fa-angle-up"></i> {{l("HideAdvancedFilters")}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="row align-items-center">
+                        <!--<Primeng-Datatable-Start>-->
+                        <div class="primeng-datatable-container col-12"
+                             [busyIf]="primengTableHelper.isLoading">
+                            <p-table #dataTable
+                                     (onLazyLoad)="getAppPolicies($event)"
+                                     [value]="primengTableHelper.records"
+                                     rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
+                                     [paginator]="false"
+                                     [lazy]="true"
+                                     [scrollable]="true"
+                                     ScrollWidth="100%"
+                                     [responsive]="primengTableHelper.isResponsive"
+                                     [resizableColumns]="primengTableHelper.resizableColumns">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="width: 130px" [hidden]="!isGrantedAny('Pages.AppPolicies.Edit', 'Pages.AppPolicies.Delete')">{{l('Actions')}}</th>
+                                        <th style="width: 150px" pSortableColumn="providerFk.businessName">
+                                            {{l('PoliciesBusinessName')}}
+                                            <p-sortIcon field="appProvidersBusinessName"></p-sortIcon>
+                                        </th>
+                                        <th style="width: 150px" pSortableColumn="policyNumber">
+                                            {{l('PolicyNumber')}}
+                                            <p-sortIcon field="appPolicies.policyNumber"></p-sortIcon>
+                                        </th>
+                                        <th style="width: 150px" pSortableColumn="policyName">
+                                            {{l('PolicyName')}}
+                                            <p-sortIcon field="appPolicies.policyName"></p-sortIcon>
+                                        </th>
+                                        <th style="width: 150px" pSortableColumn="validUntil">
+                                            {{l('ValidUntil')}}
+                                            <p-sortIcon field="appPolicies.validUntil"></p-sortIcon>
+                                        </th>
+                                        <th style="width: 150px" pSortableColumn="operationType">
+                                            {{l('OperationType')}}
+                                            <p-sortIcon field="appPolicies.operationType"></p-sortIcon>
+                                        </th>
+                                        <th style="width: 150px" pSortableColumn="isEnabled">
+                                            {{l('PoliciesIsEnabled')}}
+                                            <p-sortIcon field="appPolicies.isEnabled"></p-sortIcon>
+                                        </th>
+
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-record="$implicit">
+                                    <tr>
+                                        <td style="width: 130px"
+                                            [hidden]="!isGrantedAny('Pages.AppPolicies.Edit', 'Pages.AppPolicies.Delete')">
+                                            <div class="btn-group dropdown" dropdown container="body">
+                                                <button dropdownToggle class="dropdown-toggle btn btn-sm btn-primary">
+                                                    <i class="fa fa-cog"></i><span class="caret"></span>
+                                                    {{"Actions" | localize}}
+                                                </button>
+                                                <ul class="dropdown-menu" *dropdownMenu>
+                                                    <!-- <li>
+                                                        <a href="javascript:;" class="dropdown-item"
+                                                           (click)="viewAppPoliciesModal.show(record)">{{l('View')}}</a>
+                                                    </li> -->
+                                                    <li>
+                                                        <a href="javascript:;" class="dropdown-item" *ngIf="permission.isGranted('Pages.AppPolicies.Edit')"
+                                                           (click)="createOrEditAppPoliciesModal.show(record.appPolicies.id)">{{l('Edit')}}</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:;" class="dropdown-item" *ngIf="permission.isGranted('Pages.AppPolicies.Delete')"
+                                                           (click)="deleteAppPolicies(record.appPolicies)">{{l('Delete')}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td style="width:150px">
+                                            <span class="ui-column-title"> {{record.appProvidersBusinessName}}</span>
+
+                                        </td>
+                                        <td style="width:150px">
+                                            <span class="ui-column-title">{{record.appPolicies.policyNumber}}</span>
+
+                                        </td>
+                                        <td style="width:150px">
+                                            <span class="ui-column-title"> {{record.appPolicies.policyName}}</span>
+
+                                        </td>
+                                        <td style="width:150px">
+                                            <span class="ui-column-title">
+                                                <span *ngIf="record.appPolicies.validUntil">
+                                                    {{record.appPolicies.validUntil | luxonFormat:'yyyy-LL-dd'}}
+                                                </span>
+                                            </span>
+                                        </td>
+                                        <td style="width:150px">
+                                            <span class="ui-column-title"> {{record.appPolicies.operationType}}</span>
+
+                                        </td>
+                                        <td style="width:150px">
+                                            <span class="ui-column-title">
+                                                <div *ngIf="record.appPolicies.isEnabled" class="text-center"><i class="fa fa-check-circle kt--font-success" title="True"></i></div>
+                                                <div *ngIf="!record.appPolicies.isEnabled" class="text-center"><i class="fa fa-times-circle" title="False"></i></div>
+                                            </span>
+                                        </td>
+
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                            <div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                                {{l('NoData')}}
+                            </div>
+                            <div class="primeng-paging-container">
+                                <p-paginator [rows]="primengTableHelper.defaultRecordsCountPerPage"
+                                             #paginator
+                                             (onPageChange)="getAppPolicies($event)"
+                                             [totalRecords]="primengTableHelper.totalRecordsCount"
+                                             [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
+                                </p-paginator>
+                                <span class="total-records-count">
+                                    {{l('TotalRecordsCount', primengTableHelper.totalRecordsCount)}}
+                                </span>
+                            </div>
+                        </div>
+                        <!--<Primeng-Datatable-End>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <createOrEditAppPoliciesModal #createOrEditAppPoliciesModal (modalSave)="getAppPolicies()"></createOrEditAppPoliciesModal>
+        <viewAppPoliciesModal #viewAppPoliciesModal></viewAppPoliciesModal>
+
+    </div>
+</div>
